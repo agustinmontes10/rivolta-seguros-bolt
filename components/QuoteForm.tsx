@@ -26,7 +26,8 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
   const progress = (formData.step / totalSteps) * 100;
 
   const validateCurrentStep = () => {
-    const currentValue = formData[Object.keys(formData)[formData.step]] as string;
+    const formKeys = ['step', 'marca', 'modelo', 'año', 'patente', 'nombre', 'email', 'telefono', 'tipoSeguro'] as const;
+    const currentValue = formData[formKeys[formData.step]] as string;
     if (!currentValue) {
       setError('Este campo es requerido');
       return false;
@@ -83,8 +84,7 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
               placeholder="Ej: Toyota"
             />
             {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-            }
-          </div>
+            </div>
         );
       case 2:
         return (
@@ -105,7 +105,6 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
               placeholder="Ej: Corolla"
             />
             {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-            }
           </div>
         );
       case 3:
@@ -127,7 +126,6 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
               placeholder="Ej: 2020"
             />
             {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-            }
           </div>
         );
       case 4:
@@ -149,7 +147,6 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
               placeholder="Ej: ABC123"
             />
             {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-            }
           </div>
         );
       case 5:
@@ -171,7 +168,6 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
               placeholder="Ej: Juan Pérez"
             />
             {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-            }
           </div>
         );
       case 6:
@@ -193,7 +189,6 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
               placeholder="Ej: juan@email.com"
             />
             {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-            }
           </div>
         );
       case 7:
@@ -215,7 +210,6 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
               placeholder="Ej: +54 11 1234-5678"
             />
             {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-            }
           </div>
         );
       case 8:
@@ -240,7 +234,6 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
               <option value="Todo riesgo">Todo riesgo</option>
             </select>
             {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-            }
           </div>
         );
       default:
