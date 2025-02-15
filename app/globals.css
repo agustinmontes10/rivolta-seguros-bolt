@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: 221 36% 18%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 190 67% 50%;
+  --secondary-foreground: 0 0% 100%;
+  --background: 0 0% 100%;
+  --foreground: 221 36% 18%;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  color: hsl(var(--foreground));
+  background: hsl(var(--background));
+}
+
+.progress-car {
+  position: relative;
+  width: 60px;
+  height: 30px;
+  background-image: url('https://cdn-icons-png.flaticon.com/512/3774/3774278.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  animation: drive 0.5s ease-in-out;
+}
+
+@keyframes drive {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.intro-section {
+  background: linear-gradient(rgba(21, 37, 73, 0.9), rgba(21, 37, 73, 0.9)),
+    url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=2066&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
+  min-height: 80vh;
+}
+
+.card-hover {
+  transition: transform 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+}
