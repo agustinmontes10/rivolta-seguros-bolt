@@ -2,7 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Broker Seguros - Tu seguridad es nuestra prioridad',
+  title: 'Rivolta Seguros',
   description: 'Broker de seguros especializado en seguros de automóviles',
 };
 

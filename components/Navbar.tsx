@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
+import Image from 'next/image';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,8 +15,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-auto">
           <div className="flex-shrink-0">
             <Link href="/" className="text-xl font-bold">
-              <Image src="/assets/logo.png" alt="logo" width={200} height={200} />
-              {/* <img src="/assets/Seguros5.png" alt="logo" /> */}
+              <Image src={'/assets/logo.png'} alt='logo' width={200} height={200} />
             </Link>
           </div>
           
