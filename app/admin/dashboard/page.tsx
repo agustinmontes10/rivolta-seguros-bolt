@@ -12,17 +12,17 @@ export default function AdminDashboard() {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("");
 
-  useEffect(() => {
-    const getUser = async () => {
-      const { data, error } = await supabase.auth.getUser();
-      if (error || !data?.user) {
-        router.push("/admin");
-      } else {
-        setUser(data.user);
-      }
-    };
-    getUser();
-  }, [supabase, router]);
+  // useEffect(() => {
+  //   const getUser = async () => {
+  //     const { data, error } = await supabase.auth.getUser();
+  //     if (error || !data?.user) {
+  //       router.push("/admin");
+  //     } else {
+  //       setUser(data.user);
+  //     }
+  //   };
+  //   getUser();
+  // }, [supabase, router]);
 
   const sendEmail = async () => {
     setStatus("Enviando...");
