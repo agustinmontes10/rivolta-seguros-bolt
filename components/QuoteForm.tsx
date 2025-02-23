@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import Lottie from 'lottie-react';
 
 interface QuoteFormProps {
   onComplete: (data: any) => void;
@@ -21,6 +22,14 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
   });
 
   const [error, setError] = useState('');
+  const [animationData, setAnimationData] = useState(null);
+
+  useEffect(() => {
+    fetch('/assets/carAnimation.json')
+      .then(response => response.json())
+      .then(data => setAnimationData(data))
+      .catch(error => console.error('Error loading animation:', error));
+  }, []);
 
   const totalSteps = 8;
   const progress = (formData.step / totalSteps) * 100;
@@ -67,7 +76,7 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
     switch (formData.step) {
       case 1:
         return (
-          <div className="space-y-4">
+          <div className="space-y-4 flex flex-col justify-center items-center">
             <label className="block text-lg font-medium text-[#152549]">
               Marca del vehículo
             </label>
@@ -78,7 +87,7 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
                 setError('');
                 setFormData({ ...formData, marca: e.target.value });
               }}
-              className={`w-full p-3 border rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
+              className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
                 error ? 'border-red-500' : ''
               }`}
               placeholder="Ej: Toyota"
@@ -88,7 +97,7 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
         );
       case 2:
         return (
-          <div className="space-y-4">
+          <div className="space-y-4 flex flex-col justify-center items-center">
             <label className="block text-lg font-medium text-[#152549]">
               Modelo del vehículo
             </label>
@@ -99,7 +108,7 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
                 setError('');
                 setFormData({ ...formData, modelo: e.target.value });
               }}
-              className={`w-full p-3 border rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
+              className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
                 error ? 'border-red-500' : ''
               }`}
               placeholder="Ej: Corolla"
@@ -109,7 +118,7 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
         );
       case 3:
         return (
-          <div className="space-y-4">
+          <div className="space-y-4 flex flex-col justify-center items-center">
             <label className="block text-lg font-medium text-[#152549]">
               Año del vehículo
             </label>
@@ -120,7 +129,7 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
                 setError('');
                 setFormData({ ...formData, año: e.target.value });
               }}
-              className={`w-full p-3 border rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
+              className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
                 error ? 'border-red-500' : ''
               }`}
               placeholder="Ej: 2020"
@@ -130,7 +139,7 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
         );
       case 4:
         return (
-          <div className="space-y-4">
+          <div className="space-y-4 flex flex-col justify-center items-center">
             <label className="block text-lg font-medium text-[#152549]">
               Patente
             </label>
@@ -141,7 +150,7 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
                 setError('');
                 setFormData({ ...formData, patente: e.target.value });
               }}
-              className={`w-full p-3 border rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
+              className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
                 error ? 'border-red-500' : ''
               }`}
               placeholder="Ej: ABC123"
@@ -151,7 +160,7 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
         );
       case 5:
         return (
-          <div className="space-y-4">
+          <div className="space-y-4 flex flex-col justify-center items-center">
             <label className="block text-lg font-medium text-[#152549]">
               Nombre completo
             </label>
@@ -162,7 +171,7 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
                 setError('');
                 setFormData({ ...formData, nombre: e.target.value });
               }}
-              className={`w-full p-3 border rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
+              className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
                 error ? 'border-red-500' : ''
               }`}
               placeholder="Ej: Juan Pérez"
@@ -172,7 +181,7 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
         );
       case 6:
         return (
-          <div className="space-y-4">
+          <div className="space-y-4 flex flex-col justify-center items-center">
             <label className="block text-lg font-medium text-[#152549]">
               Email
             </label>
@@ -183,7 +192,7 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
                 setError('');
                 setFormData({ ...formData, email: e.target.value });
               }}
-              className={`w-full p-3 border rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
+              className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
                 error ? 'border-red-500' : ''
               }`}
               placeholder="Ej: juan@email.com"
@@ -193,7 +202,7 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
         );
       case 7:
         return (
-          <div className="space-y-4">
+          <div className="space-y-4 flex flex-col justify-center items-center">
             <label className="block text-lg font-medium text-[#152549]">
               Teléfono
             </label>
@@ -204,7 +213,7 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
                 setError('');
                 setFormData({ ...formData, telefono: e.target.value });
               }}
-              className={`w-full p-3 border rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
+              className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
                 error ? 'border-red-500' : ''
               }`}
               placeholder="Ej: +54 11 1234-5678"
@@ -214,7 +223,7 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
         );
       case 8:
         return (
-          <div className="space-y-4">
+          <div className="space-y-4 flex flex-col justify-center items-center">
             <label className="block text-lg font-medium text-[#152549]">
               Tipo de Seguro
             </label>
@@ -224,7 +233,7 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
                 setError('');
                 setFormData({ ...formData, tipoSeguro: e.target.value });
               }}
-              className={`w-full p-3 border rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
+              className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
                 error ? 'border-red-500' : ''
               }`}
             >
@@ -242,8 +251,8 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
   };
 
   return (
-    <div className="bg-white p-8 rounded-lg shadow-lg">
-      <div className="mb-8">
+    <div className="bg-white p-8 rounded-lg shadow-xl shadow-gray-300 mb-8">
+      <div className="mb-8 mt-3">
         <div className="h-2 bg-gray-200 rounded-full">
           <motion.div
             className="h-full bg-[#3ec1d3] rounded-full"
@@ -254,12 +263,14 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
         </div>
         <div className="relative mt-2">
           <motion.div
-            className="progress-car absolute"
+            className="absolute"
             initial={{ left: 0 }}
             animate={{ left: `${progress}%` }}
             transition={{ duration: 0.5 }}
-            style={{ transform: 'translateX(-50%)' }}
-          />
+            style={{ transform: 'translateY(-65%) translateX(-75%)' }}
+          >
+            {animationData && <Lottie animationData={animationData} style={{ width: 120, height: 120 }} />}
+          </motion.div>
         </div>
       </div>
 
@@ -278,7 +289,7 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
         {formData.step > 1 && (
           <button
             onClick={handlePrevious}
-            className="px-6 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+            className="px-6 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors"
           >
             Anterior
           </button>
