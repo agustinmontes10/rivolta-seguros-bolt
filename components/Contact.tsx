@@ -1,11 +1,21 @@
 "use client";
 
-import { useState } from 'react';
+import Lottie from 'lottie-react';
+import { useEffect, useState } from 'react';
 
 const Contact = () => {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [emailAnimation, setEmailAnimation] = useState(null);
+    
+  useEffect(() => {
+    fetch('/assets/emailAnimation.json')
+      .then(response => response.json())
+      .then(data => setEmailAnimation(data))
+      .catch(error => console.error('Error loading animation:', error));
+  }, []);
+    
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,7 +64,7 @@ const Contact = () => {
   return (
     <section id="contact" className="py-20 bg-primary text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
+        <div className="text-center">
           <h2 className="text-3xl font-bold mb-4">Mantente Informado</h2>
           <p className="text-lg text-gray-300 max-w-2xl mx-auto">
             Suscríbete a nuestro newsletter para recibir las últimas novedades y ofertas especiales
@@ -63,6 +73,9 @@ const Contact = () => {
 
         <div className="max-w-md mx-auto">
           <form onSubmit={handleSubmit} className="space-y-4">
+            <div className='flex justify-center items-center'>
+              {emailAnimation && <Lottie animationData={emailAnimation} style={{ width: 200, height: 200 }} />}
+            </div>
             <div>
               <input
                 type="email"
