@@ -84,9 +84,9 @@ const QuoteForm = () => {
         `;
     
         const whatsappUrl = `https://wa.me/1234567890?text=${encodeURIComponent(message)}`;
-        if (windowObject) {
-          windowObject.open(whatsappUrl, '_blank');
-        }
+        // if (windowObject) {
+        //   windowObject.open(whatsappUrl, '_blank');
+        // }
       
     }
   };
