@@ -19,7 +19,7 @@ const QuoteForm = () => {
 
   const [error, setError] = useState('');
   const [animationData, setAnimationData] = useState(null);
-  const [windowObject, setWindowObject] = useState<typeof window | null>(null);
+  const [isClient, setIsClient] = useState<boolean>(false);
 
   useEffect(() => {
     fetch('/assets/carAnimation.json')
@@ -29,7 +29,7 @@ const QuoteForm = () => {
   }, []);
 
   useEffect(() => {
-    setWindowObject(window);
+    setIsClient(true);
   }, [])
   
 
@@ -84,9 +84,9 @@ const QuoteForm = () => {
         `;
     
         const whatsappUrl = `https://wa.me/1234567890?text=${encodeURIComponent(message)}`;
-        // if (windowObject) {
-        //   windowObject.open(whatsappUrl, '_blank');
-        // }
+        if (isClient) {
+          window.open(whatsappUrl, '_blank');
+        }
       
     }
   };
