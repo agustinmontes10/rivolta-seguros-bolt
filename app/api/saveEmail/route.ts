@@ -7,7 +7,11 @@ import dotenv from "dotenv";
 dotenv.config();
 
 
-export async function saveEmail(req: NextRequest) {
+export async function POST(req: NextRequest) {
+  if (req.method !== "POST") {
+    return NextResponse.json({ error: "Método no permitido" }, { status: 405 });
+  }
+
   try {
     const body = await req.json();
     const { email } = body;
@@ -63,12 +67,12 @@ export async function saveEmail(req: NextRequest) {
   }
 }
 
-export async function handler(req: NextRequest) {
-  if (req.method === "POST") {
-    return saveEmail(req);
-  } else {
-    return NextResponse.json({ error: "Método no permitido" }, { status: 405 });
-  }
-}
+// export async function handler(req: NextRequest) {
+//   if (req.method === "POST") {
+//     return saveEmail(req);
+//   } else {
+//     return NextResponse.json({ error: "Método no permitido" }, { status: 405 });
+//   }
+// }
 
-export { handler as GET, handler as PUT, handler as DELETE, saveEmail as POST };
+// export { handler as GET, handler as PUT, handler as DELETE, saveEmail as POST };
