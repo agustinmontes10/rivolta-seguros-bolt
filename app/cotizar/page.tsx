@@ -1,23 +1,8 @@
-"use client";
-
-import { useState, useEffect } from 'react';
 import QuoteForm from '@/components/QuoteForm';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 export default function Cotizar() {
-  const [formData, setFormData] = useState({
-    step: 1,
-    marca: '',
-    modelo: '',
-    año: '',
-    patente: '',
-    nombre: '',
-    email: '',
-    telefono: '',
-    tipoSeguro: '',
-  });
-
 
   return (
     <div className="min-h-screen flex flex-col">
