@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Lottie from 'lottie-react';
 
-const QuoteForm = () => {
+export default function QuoteForm() {
   const [formData, setFormData] = useState({
     step: 1,
     marca: '',
@@ -332,5 +332,3 @@ const QuoteForm = () => {
     </div>
   );
 };
-
-export default QuoteForm;
