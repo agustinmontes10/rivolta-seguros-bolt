@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import QuoteForm from '@/components/QuoteForm';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -32,7 +32,9 @@ export default function Cotizar() {
     `;
 
     const whatsappUrl = `https://wa.me/1234567890?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+    if (typeof window !== 'undefined') {
+      window.open(whatsappUrl, '_blank');
+    }
   };
 
   return (
