@@ -40,7 +40,7 @@ export default function Cotizar() {
       <Navbar />
       <main className="flex-grow pt-16">
         <div className="max-w-4xl mx-auto px-4 py-12">
-          <h1 className="text-3xl font-bold text-center text-[#152549] mb-8">
+          <h1 className="text-3xl font-bold text-center text-[#152549] mb-3">
             Cotiza tu seguro
           </h1>
           <QuoteForm onComplete={handleComplete} />

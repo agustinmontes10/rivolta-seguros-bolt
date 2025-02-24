@@ -1,42 +1,47 @@
+import React from 'react';
+import '@/styles/insurers.scss';
+
 const Insurers = () => {
   const insurers = [
     {
       name: "Aseguradora A",
-      logo: "https://via.placeholder.com/150x80?text=Logo+A",
+      logo: "	https://branding.123seguro.com/logotypes/insurers/gray/seguros-experta.svg",
     },
     {
       name: "Aseguradora B",
-      logo: "https://via.placeholder.com/150x80?text=Logo+B",
+      logo: "https://branding.123seguro.com/logotypes/insurers/gray/seguros-san-cristobal.svg",
     },
     {
       name: "Aseguradora C",
-      logo: "https://via.placeholder.com/150x80?text=Logo+C",
+      logo: "https://branding.123seguro.com/logotypes/insurers/gray/seguros-provincia.svg",
     },
     {
       name: "Aseguradora D",
-      logo: "https://via.placeholder.com/150x80?text=Logo+D",
+      logo: "https://branding.123seguro.com/logotypes/insurers/gray/seguros-mercantil.svg",
     },
   ];
 
   return (
-    <section id="insurers" className="py-20 bg-gray-50">
+    <section id="insurers" className="py-20 bg-gray-100 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-center text-[#152549] mb-12">
           Nuestras Aseguradoras
         </h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          {insurers.map((insurer, index) => (
-            <div
-              key={index}
-              className="bg-white p-6 rounded-lg shadow-md flex items-center justify-center card-hover"
-            >
-              <img
-                src={insurer.logo}
-                alt={insurer.name}
-                className="max-w-full h-auto"
-              />
-            </div>
-          ))}
+        <div className="insurers-banner">
+          <div className="insurers-track">
+            {insurers.concat(insurers).map((insurer, index) => (
+              <div
+                key={index}
+                className="insurer-card"
+              >
+                <img
+                  src={insurer.logo}
+                  alt={insurer.name}
+                  className="max-w-full h-auto"
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

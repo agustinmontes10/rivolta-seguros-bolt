@@ -1,0 +1,5 @@
+PALETA DE COLORES:
+    - #3ec1d3 (CELESTE) => hover: #36adbf
+    - #ffffff (BLANCO)
+    - #152549 (AZUL MARINO) => hover: #1a2d5a
+    - #d1d5dc (GRAY)

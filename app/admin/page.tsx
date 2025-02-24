@@ -20,11 +20,11 @@ export default function AdminLogin() {
     //   password,
     // });
 
-    if (error) {
-      setError("Error de inicio de sesión");
-    } else {
-      router.push("/admin/dashboard");
-    }
+    // if (error) {
+    //   setError("Error de inicio de sesión");
+    // } else {
+    //   router.push("/admin/dashboard");
+    // }
   };
 
   return (

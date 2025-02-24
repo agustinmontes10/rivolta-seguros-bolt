@@ -33,6 +33,7 @@ body {
   from {
     transform: translateX(-100%);
   }
+
   to {
     transform: translateX(0);
   }
@@ -40,10 +41,10 @@ body {
 
 .intro-section {
   background: linear-gradient(rgba(21, 37, 73, 0.9), rgba(21, 37, 73, 0.9)),
-    url('/assets/Seguros3.png');
+    url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=2066&auto=format&fit=crop');
+  background-size: cover;
   background-position: center;
-  min-height: 70vh;
-  background-repeat: repeat-x;
+  min-height: 80vh;
 }
 
 .card-hover {
