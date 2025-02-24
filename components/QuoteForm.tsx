@@ -4,11 +4,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Lottie from 'lottie-react';
 
-interface QuoteFormProps {
-  onComplete: (data: any) => void;
-}
-
-const QuoteForm = ({ onComplete }: QuoteFormProps) => {
+const QuoteForm = () => {
   const [formData, setFormData] = useState({
     step: 1,
     marca: '',
@@ -68,7 +64,24 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
 
   const handleSubmit = () => {
     if (validateCurrentStep()) {
-      onComplete(formData);
+      
+        const message = `
+          *Nueva Cotización*
+          Marca: ${formData.marca}
+          Modelo: ${formData.modelo}
+          Año: ${formData.año}
+          Patente: ${formData.patente}
+          Nombre: ${formData.nombre}
+          Email: ${formData.email}
+          Teléfono: ${formData.telefono}
+          Tipo de Seguro: ${formData.tipoSeguro}
+        `;
+    
+        const whatsappUrl = `https://wa.me/1234567890?text=${encodeURIComponent(message)}`;
+        if (typeof window !== 'undefined') {
+          window.open(whatsappUrl, '_blank');
+        }
+      
     }
   };
 

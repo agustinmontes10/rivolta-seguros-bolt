@@ -18,24 +18,6 @@ export default function Cotizar() {
     tipoSeguro: '',
   });
 
-  const handleComplete = (data: any) => {
-    const message = `
-      *Nueva Cotización*
-      Marca: ${data.marca}
-      Modelo: ${data.modelo}
-      Año: ${data.año}
-      Patente: ${data.patente}
-      Nombre: ${data.nombre}
-      Email: ${data.email}
-      Teléfono: ${data.telefono}
-      Tipo de Seguro: ${data.tipoSeguro}
-    `;
-
-    const whatsappUrl = `https://wa.me/1234567890?text=${encodeURIComponent(message)}`;
-    if (typeof window !== 'undefined') {
-      window.open(whatsappUrl, '_blank');
-    }
-  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -45,7 +27,7 @@ export default function Cotizar() {
           <h1 className="text-3xl font-bold text-center text-[#152549] mb-3">
             Cotiza tu seguro
           </h1>
-          <QuoteForm onComplete={handleComplete} />
+          <QuoteForm />
         </div>
       </main>
       <Footer />
