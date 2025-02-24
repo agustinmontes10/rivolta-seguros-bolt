@@ -13,18 +13,17 @@ export default function AdminLogin() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(false);
 
-    // const { error } = await supabase.auth.signInWithPassword({
-    //   email,
-    //   password,
-    // });
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-    // if (error) {
-    //   setError("Error de inicio de sesión");
-    // } else {
-    //   router.push("/admin/dashboard");
-    // }
+    if (error) {
+      setError("Error de inicio de sesión");
+    } else {
+      router.push("/admin/dashboard");
+    }
   };
 
   return (
