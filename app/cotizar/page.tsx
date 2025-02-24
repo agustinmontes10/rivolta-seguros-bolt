@@ -12,7 +12,7 @@ export default function Cotizar() {
           <h1 className="text-3xl font-bold text-center text-[#152549] mb-3">
             Cotiza tu seguro
           </h1>
-          <QuoteForm />
+          {/* <QuoteForm /> */}
         </div>
       </main>
       <Footer />
