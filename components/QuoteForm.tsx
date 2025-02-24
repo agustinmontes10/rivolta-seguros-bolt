@@ -19,6 +19,7 @@ const QuoteForm = () => {
 
   const [error, setError] = useState('');
   const [animationData, setAnimationData] = useState(null);
+  const [windowObject, setWindowObject] = useState<typeof window | null>(null);
 
   useEffect(() => {
     fetch('/assets/carAnimation.json')
@@ -26,6 +27,11 @@ const QuoteForm = () => {
       .then(data => setAnimationData(data))
       .catch(error => console.error('Error loading animation:', error));
   }, []);
+
+  useEffect(() => {
+    setWindowObject(window);
+  }, [])
+  
 
   const totalSteps = 8;
   const progress = (formData.step / totalSteps) * 100;
@@ -78,8 +84,8 @@ const QuoteForm = () => {
         `;
     
         const whatsappUrl = `https://wa.me/1234567890?text=${encodeURIComponent(message)}`;
-        if (typeof window !== 'undefined') {
-          window.open(whatsappUrl, '_blank');
+        if (windowObject) {
+          windowObject.open(whatsappUrl, '_blank');
         }
       
     }
