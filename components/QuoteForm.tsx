@@ -2,13 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import Lottie from 'lottie-react';
+// import Lottie from 'lottie-react';
+import dynamic from 'next/dynamic';
+const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
-interface QuoteFormProps {
-  onComplete: (data: any) => void;
-}
-
-const QuoteForm = ({ onComplete }: QuoteFormProps) => {
+export default function QuoteForm() {
   const [formData, setFormData] = useState({
     step: 1,
     marca: '',
@@ -23,13 +21,19 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
 
   const [error, setError] = useState('');
   const [animationData, setAnimationData] = useState(null);
+  const [isClient, setIsClient] = useState<boolean>(false);
 
   useEffect(() => {
-    fetch('/assets/carAnimation.json')
-      .then(response => response.json())
-      .then(data => setAnimationData(data))
-      .catch(error => console.error('Error loading animation:', error));
+      fetch('/assets/carAnimation.json')
+        .then(response => response.json())
+        .then(data => setAnimationData(data))
+        .catch(error => console.error('Error loading animation:', error));
   }, []);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, [])
+  
 
   const totalSteps = 8;
   const progress = (formData.step / totalSteps) * 100;
@@ -68,7 +72,24 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
 
   const handleSubmit = () => {
     if (validateCurrentStep()) {
-      onComplete(formData);
+      
+        const message = `
+          *Nueva Cotización*
+          Marca: ${formData.marca}
+          Modelo: ${formData.modelo}
+          Año: ${formData.año}
+          Patente: ${formData.patente}
+          Nombre: ${formData.nombre}
+          Email: ${formData.email}
+          Teléfono: ${formData.telefono}
+          Tipo de Seguro: ${formData.tipoSeguro}
+        `;
+    
+        const whatsappUrl = `https://wa.me/1234567890?text=${encodeURIComponent(message)}`;
+        if (isClient) {
+          window.open(whatsappUrl, '_blank');
+        }
+      
     }
   };
 
@@ -313,5 +334,3 @@ const QuoteForm = ({ onComplete }: QuoteFormProps) => {
     </div>
   );
 };
-
-export default QuoteForm;

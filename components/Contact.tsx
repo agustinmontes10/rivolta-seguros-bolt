@@ -1,7 +1,10 @@
 "use client";
 
-import Lottie from "lottie-react";
+// import Lottie from "lottie-react";
 import { useEffect, useState } from "react";
+import dynamic from 'next/dynamic';
+const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
+
 
 const Contact = () => {
   const [email, setEmail] = useState("");
@@ -12,10 +15,10 @@ const Contact = () => {
   const [emailAnimation, setEmailAnimation] = useState(null);
 
   useEffect(() => {
-    fetch("/assets/emailAnimation.json")
-      .then((response) => response.json())
-      .then((data) => setEmailAnimation(data))
-      .catch((error) => console.error("Error loading animation:", error));
+      fetch("/assets/emailAnimation.json")
+        .then((response) => response.json())
+        .then((data) => setEmailAnimation(data))
+        .catch((error) => console.error("Error loading animation:", error));
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
