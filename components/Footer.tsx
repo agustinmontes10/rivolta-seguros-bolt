@@ -1,4 +1,4 @@
-import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+// import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -39,16 +39,16 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-4">Síguenos</h4>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-[#3ec1d3]">
-                <Facebook size={24} />
+                {/* <Facebook size={24} /> */}
               </a>
               <a href="#" className="text-gray-400 hover:text-[#3ec1d3]">
-                <Twitter size={24} />
+                {/* <Twitter size={24} /> */}
               </a>
               <a href="#" className="text-gray-400 hover:text-[#3ec1d3]">
-                <Instagram size={24} />
+                {/* <Instagram size={24} /> */}
               </a>
               <a href="#" className="text-gray-400 hover:text-[#3ec1d3]">
-                <Linkedin size={24} />
+                {/* <Linkedin size={24} /> */}
               </a>
             </div>
           </div>

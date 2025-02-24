@@ -1,19 +1,19 @@
-import { Shield, Clock, Wallet } from 'lucide-react';
+// import { Shield, Clock, Wallet } from 'lucide-react';
 
 const Advertising = () => {
   const features = [
     {
-      icon: <Shield className="w-12 h-12 text-[#3ec1d3]" />,
+      // icon: <Shield className="w-12 h-12 text-[#3ec1d3]" />,
       title: "Protección Completa",
       description: "Cobertura integral para tu vehículo con las mejores aseguradoras"
     },
     {
-      icon: <Clock className="w-12 h-12 text-[#3ec1d3]" />,
+      // icon: <Clock className="w-12 h-12 text-[#3ec1d3]" />,
       title: "Respuesta Rápida",
       description: "Atención inmediata y gestión eficiente de tus reclamos"
     },
     {
-      icon: <Wallet className="w-12 h-12 text-[#3ec1d3]" />,
+      // icon: <Wallet className="w-12 h-12 text-[#3ec1d3]" />,
       title: "Precios Competitivos",
       description: "Las mejores tarifas del mercado adaptadas a tus necesidades"
     }
@@ -29,7 +29,7 @@ const Advertising = () => {
               className="bg-white p-8 rounded-lg shadow-md text-center card-hover"
             >
               <div className="flex justify-center mb-4">
-                {feature.icon}
+                {/* {feature.icon} */}
               </div>
               <h3 className="text-xl font-semibold text-[#152549] mb-4">
                 {feature.title}

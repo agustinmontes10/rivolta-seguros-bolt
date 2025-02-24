@@ -12,10 +12,12 @@ const Contact = () => {
   const [emailAnimation, setEmailAnimation] = useState(null);
 
   useEffect(() => {
-    fetch("/assets/emailAnimation.json")
-      .then((response) => response.json())
-      .then((data) => setEmailAnimation(data))
-      .catch((error) => console.error("Error loading animation:", error));
+    if(typeof window === 'undefined'){
+      fetch("/assets/emailAnimation.json")
+        .then((response) => response.json())
+        .then((data) => setEmailAnimation(data))
+        .catch((error) => console.error("Error loading animation:", error));
+    }
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {

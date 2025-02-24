@@ -22,10 +22,12 @@ export default function QuoteForm() {
   const [isClient, setIsClient] = useState<boolean>(false);
 
   useEffect(() => {
-    fetch('/assets/carAnimation.json')
-      .then(response => response.json())
-      .then(data => setAnimationData(data))
-      .catch(error => console.error('Error loading animation:', error));
+    if (typeof window !== "undefined") {
+      fetch('/assets/carAnimation.json')
+        .then(response => response.json())
+        .then(data => setAnimationData(data))
+        .catch(error => console.error('Error loading animation:', error));
+    }
   }, []);
 
   useEffect(() => {
