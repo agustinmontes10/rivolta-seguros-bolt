@@ -1,6 +1,6 @@
 "use client";
 
-import Lottie from "lottie-react";
+// import Lottie from "lottie-react";
 import { useEffect, useState } from "react";
 
 const Contact = () => {
@@ -11,14 +11,14 @@ const Contact = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [emailAnimation, setEmailAnimation] = useState(null);
 
-  useEffect(() => {
-    if(typeof window === 'undefined'){
-      fetch("/assets/emailAnimation.json")
-        .then((response) => response.json())
-        .then((data) => setEmailAnimation(data))
-        .catch((error) => console.error("Error loading animation:", error));
-    }
-  }, []);
+  // useEffect(() => {
+  //   if(typeof window === 'undefined'){
+  //     fetch("/assets/emailAnimation.json")
+  //       .then((response) => response.json())
+  //       .then((data) => setEmailAnimation(data))
+  //       .catch((error) => console.error("Error loading animation:", error));
+  //   }
+  // }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,12 +78,12 @@ const Contact = () => {
         <div className="max-w-md mx-auto">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex justify-center items-center">
-              {emailAnimation && (
+              {/* {emailAnimation && (
                 <Lottie
                   animationData={emailAnimation}
                   style={{ width: 200, height: 200 }}
                 />
-              )}
+              )} */}
             </div>
             <div>
               <input
