@@ -1,0 +1,13 @@
+{
+    "GOOGLE_TYPE": "service_account",
+    "GOOGLE_PROJECT_ID": "rivolta-seguros",
+    "GOOGLE_PRIVATE_KEY_ID": "d4ab3af6fc00ae33668f5a9a7db179471cf9b7b8",
+    "GOOGLE_PRIVATE_KEY": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDQoXKGWgaRWxVk\nz5Ww8Dbk5wA5ZlxVWyC1BNIN6YwsahBl06ammLuI7YNIlAaReuapmXWGinMQbHzl\nyZbfEn/suSK2HRsKGM9dk/CRlu7u0Fdn141NSv3DCV6ted4dfC5Ab5mmuRF7gdkH\nDMntWzBILcperVso1dB5l+4meO7V+xw2T0Zr+cNmz11Ky1un7oAh7+yH5OrJT65s\nUMM50SxypyziLdwxtuXe3knaSjGhd9C1W+n/z1dNpwXXdsn7ckCg2In8EsLq+RQV\nAnTFvudMxAWqb7AQ3lE6MxGTHNrpAIoiyyvlj48Sade0HOFbKj9z0mrHvTJ/jZhg\n0NUvlnGTAgMBAAECggEAAiTUqqkygCDJsoQZMM8oQmTob8DZc+gjdqQqopu5tSTx\nBLgwFsN1Q5lmjYLURu0NdTinvccq9g1dDupjzg0Sr+I4k3+BZxQuzqlXfuuxfiWO\n1heNaDz/KIUuZAD32iFI9Bo5Gax4LjYt0+qNOhTSl4A9VwKhLQO/jmtdMCfIN8FL\n5lkazLU1OnfzvhMAOuzHqQ9UY2hjbrUD20/qF6nazWEq2C6aTnQHAqFp1vxcxoXI\nXrehNjvQEPbD+ULVdqn05cIPL3jkXu+dtB2noIylJB/+xM/coXzTecRv9iyBU4ht\nCfrUAehkPois0BEiyU40pjE1lSRtvyswDMoARuKezQKBgQD771c9in001INUjuHV\n9Bg+ZZO/+Caq4GnBW7ou5Mi5u79oJfkoLDiAEDTOhiiMsCkHqU7jmLDDKfEt8XzG\nPJtlnKALZsLa5RwryKY+ShSsJAtMeTpqOFUy3Q/qHRyMGdIG1B3q4fi8hlIywLQ6\nbA+WlNCuzLYIilvrK+q3YG1BBQKBgQDT/zsnMMlEnTvsz8IpnxIaoAanwFS3KYEO\n+u9y2d0SaDYyzdkDvLUh3eMgy9dNREDzjvFUXQuxhYf/eeS90gMN2GLkOFTmDUV7\nGDD5wajPY43IJ2t7OI/rri76VkOLsnxJI01GmWGHOmwL4iHiyBk4PxRtnxYahDPU\nOWCxTpbLtwKBgQClA7mSt5kW93Ml+Yh2iTEv/XxvKuy409CxM5GZkYTgEtdmMikm\nZQCE8RiFhV4d+GyHdiAT9zkgO+KbAyeE+MGYJqS1kxNiKNrw2rX46rDrp5g2+NiI\nJmm3rQ/1eifupCLrEhiednBjm19PmuTxt0HmkYa2V6OLqIRYXyWYAvLMuQKBgCfp\nGwfLxXhnaYqxqkoPqmbczaPzL3+0Dpn1X/LtVRNMDzgNTNfJRQh1L3dTKNthCCFS\nPdi2E6d+DhZoqkmaKf0HScbRXBpbUUNVUJMUhGVWxrBxy2hNQ7sI9csnRlwcZA2Y\n2cl6wsOkmga6scpyBV1zcrMYih6/2MoRa0S2GOmNAoGAUNH57p6AfNyIld03G3IG\n3gApb+tySgKw/Ezmdkf44jVQGFK8l6yblePybERt0CfWo3zxx3IrDT39eaG0IEhS\noYLambJQJLM3+VzHd7xTUlGqH2Ukf3w+I3gbO/TNwfnAjPj7qfCOMH2fBO457kH0\nVqyXrn7iCtqEDU8Ej6lg5mM=\n-----END PRIVATE KEY-----\n",
+    "GOOGLE_CLIENT_EMAIL": "google-sheets-service@rivolta-seguros.iam.gserviceaccount.com",
+    "GOOGLE_CLIENT_ID": "111950655273762771564",
+    "GOOGLE_AUTH_URI": "https://accounts.google.com/o/oauth2/auth",
+    "GOOGLE_TOKEN_URI": "https://oauth2.googleapis.com/token",
+    "GOOGLE_AUTH_PROVIDER_X509_CERT_URL": "https://www.googleapis.com/oauth2/v1/certs",
+    "GOOGLE_CLIENT_X509_CERT_URL": "https://www.googleapis.com/robot/v1/metadata/x509/google-sheets-service%40rivolta-seguros.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
+  }

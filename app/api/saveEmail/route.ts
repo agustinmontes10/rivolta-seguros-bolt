@@ -1,33 +1,47 @@
 import { google } from "googleapis";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import dotenv from "dotenv";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  console.log("Request:", req);
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Método no permitido" });
-  }
+dotenv.config();
 
-  const { email } = req.body;
 
-  if (!email || !email.includes("@")) {
-    return res.status(400).json({ error: "Email inválido" });
-  }
-
+export async function saveEmail(req: NextRequest) {
   try {
-    // Autenticación con Google Sheets
-    const credentialsPath = path.join(
-      process.cwd(),
-      "rivolta-seguros-d4ab3af6fc00.json"
-    );
+    const body = await req.json();
+    const { email } = body;
+
+    if (!email || !email.includes("@")) {
+      return NextResponse.json({ error: "Email inválido" }, { status: 400 });
+    }
+    // console.log(process.env, '............................................')
+    const credentials = {
+      type: process.env.GOOGLE_TYPE,
+      project_id: process.env.GOOGLE_PROJECT_ID,
+      private_key_id: process.env.GOOGLE_PRIVATE_KEY_ID,
+      private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+      client_email: process.env.GOOGLE_CLIENT_EMAIL,
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      auth_uri: process.env.GOOGLE_AUTH_URI,
+      token_uri: process.env.GOOGLE_TOKEN_URI,
+      auth_provider_x509_cert_url: process.env.GOOGLE_AUTH_PROVIDER_X509_CERT_URL,
+      client_x509_cert_url: process.env.GOOGLE_CLIENT_X509_CERT_URL,
+    };
+
+    // if (!fs.existsSync(credentialsPath)) {
+    //   console.log(path.join(
+    //     __dirname,
+    //     "rivolta-seguros-d4ab3af6fc00.json"
+    //   ), '............................................')
+    //   return NextResponse.json({ error: "Credentials file not found" }, { status: 500 });
+    // }
+    console.log(credentials, ';;;;;;;;;;;;;;;;;')
     const auth = new google.auth.GoogleAuth({
-      keyFile: credentialsPath,
+      credentials,
       scopes: ["https://www.googleapis.com/auth/spreadsheets"],
     });
+ 
 
     const sheets = google.sheets({ version: "v4", auth });
 
@@ -42,9 +56,19 @@ export default async function handler(
       requestBody: { values: [[email]] },
     });
 
-    res.status(200).json({ message: "Email guardado correctamente" });
+    return NextResponse.json({ message: "Email guardado correctamente" }, { status: 200 });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Error al guardar el email" });
+    return NextResponse.json({ error: "Error al guardar el email" }, { status: 500 });
   }
 }
+
+export async function handler(req: NextRequest) {
+  if (req.method === "POST") {
+    return saveEmail(req);
+  } else {
+    return NextResponse.json({ error: "Método no permitido" }, { status: 405 });
+  }
+}
+
+export { handler as GET, handler as PUT, handler as DELETE, saveEmail as POST };
