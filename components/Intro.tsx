@@ -2,17 +2,19 @@
 
 // import Lottie from "lottie-react";
 import { useEffect, useState } from "react";
+import dynamic from 'next/dynamic';
+const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
 const Intro = () => {
 
   const [homeAnimation, setHomeAnimation] = useState(null);
   
-    // useEffect(() => {
-    //   fetch('/assets/homeAnimation.json')
-    //     .then(response => response.json())
-    //     .then(data => setHomeAnimation(data))
-    //     .catch(error => console.error('Error loading animation:', error));
-    // }, []);
+    useEffect(() => {
+      fetch('/assets/homeAnimation.json')
+        .then(response => response.json())
+        .then(data => setHomeAnimation(data))
+        .catch(error => console.error('Error loading animation:', error));
+    }, []);
   
   
   return (
@@ -25,7 +27,7 @@ const Intro = () => {
           Encuentra el seguro perfecto para tu vehículo con las mejores coberturas y precios del mercado.
         </p>
         <div className="absolute inset-0 flex items-center justify-start z-0">
-          {/* {homeAnimation && <Lottie animationData={homeAnimation} style={{ width: 400, height: 400 }} />} */}
+          {homeAnimation && <Lottie animationData={homeAnimation} style={{ width: 400, height: 400 }} />}
         </div>
         <a
           href="/cotizar"

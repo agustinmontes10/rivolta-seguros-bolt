@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import Lottie from 'lottie-react';
+// import Lottie from 'lottie-react';
+import dynamic from 'next/dynamic';
+const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
 export default function QuoteForm() {
   const [formData, setFormData] = useState({
@@ -22,12 +24,10 @@ export default function QuoteForm() {
   const [isClient, setIsClient] = useState<boolean>(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
       fetch('/assets/carAnimation.json')
         .then(response => response.json())
         .then(data => setAnimationData(data))
         .catch(error => console.error('Error loading animation:', error));
-    }
   }, []);
 
   useEffect(() => {
