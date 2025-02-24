@@ -1,7 +1,10 @@
 "use client";
-import QuoteForm from '@/components/QuoteForm';
+// import QuoteForm from '@/components/QuoteForm';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import dynamic from 'next/dynamic';
+
+const QuoteForm = dynamic(() => import('@/components/QuoteForm'), { ssr: false });
 
 export default function Cotizar() {
 
