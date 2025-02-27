@@ -11,6 +11,7 @@ export default function QuoteForm() {
     step: 1,
     marca: '',
     modelo: '',
+    version: '',
     año: '',
     patente: '',
     nombre: '',
@@ -22,18 +23,54 @@ export default function QuoteForm() {
   const [error, setError] = useState('');
   const [animationData, setAnimationData] = useState(null);
   const [isClient, setIsClient] = useState<boolean>(false);
+  const [brands, setBrands] = useState([]);
+  const [currentBrandId, setCurrentBrandId] = useState('');
+  const [models, setModels] = useState([]);
+  const [currentModelId, setCurrentModelId] = useState('');
+  const [versions, setVersions] = useState([]);
 
-  useEffect(() => {
-      fetch('/assets/carAnimation.json')
-        .then(response => response.json())
-        .then(data => setAnimationData(data))
-        .catch(error => console.error('Error loading animation:', error));
-  }, []);
+  const animData = () => {
+    fetch('/assets/carAnimation.json')
+    .then(response => response.json())
+    .then(data => setAnimationData(data))
+    .catch(error => console.error('Error loading animation:', error));
+  }
 
-  useEffect(() => {
-    setIsClient(true);
-  }, [])
-  
+  const getBrands = () => {
+    fetch('https://api.mercadolibre.com/sites/MLA/search?category=MLA1744')
+    .then(response => response.json())
+    .then(data => {
+      const brands = data.available_filters.find((filter: any) => filter.id === 'BRAND').values;
+      setBrands(brands)
+      console.log(brands, 'brandsData')
+    })
+    .catch(error => console.error('Error:', error));
+  }
+
+  const getModels = (brandId: string) => {
+    console.log(brandId, 'brandId')
+    if (!brandId) return;
+    fetch(`https://api.mercadolibre.com/sites/MLA/search?category=MLA1744&brand=${brandId}`)
+    .then(response => response.json())
+    .then(data => {
+      const models = data.available_filters.find((filter: any) => filter.id === 'MODEL').values;
+      setModels(models)
+      console.log(models, 'modelsData')
+    })
+    .catch(error => console.error('Error:', error));
+  }
+
+  const getVersions = (brandId: string, modelId: string) => {
+   if (!brandId || !modelId) return;
+    fetch(`https://api.mercadolibre.com/sites/MLA/search?category=MLA1744&brand=${brandId}&model=${modelId}`)
+    .then(response => response.json())
+    .then(data => {
+      const versions = data.available_filters.find((filter: any) => filter.id === 'SHORT_VERSION').values;
+      setVersions(versions)
+      console.log(versions, 'versionsData')
+    })
+    .catch(error => console.error('Error:', error));
+  }
 
   const totalSteps = 8;
   const progress = (formData.step / totalSteps) * 100;
@@ -77,6 +114,7 @@ export default function QuoteForm() {
           *Nueva Cotización*
           Marca: ${formData.marca}
           Modelo: ${formData.modelo}
+          Versión: ${formData.version}
           Año: ${formData.año}
           Patente: ${formData.patente}
           Nombre: ${formData.nombre}
@@ -93,6 +131,20 @@ export default function QuoteForm() {
     }
   };
 
+  useEffect(() => {
+    setIsClient(true);
+    animData();  
+    getBrands();
+  }, []);
+
+  useEffect(() => {
+    getModels(currentBrandId);
+  }, [currentBrandId]);
+
+  useEffect(() => {
+    getVersions(currentBrandId, currentModelId);
+  }, [currentBrandId, currentModelId]);
+
   const renderStep = () => {
     switch (formData.step) {
       case 1:
@@ -101,7 +153,70 @@ export default function QuoteForm() {
             <label className="block text-lg font-medium text-[#152549]">
               Marca del vehículo
             </label>
-            <input
+            {/* BRAND */}
+            <select
+              value={formData.marca}
+              onChange={(e) => {
+                setError('');
+                const selectedOption = e.target.selectedOptions[0];
+                const selectedBrandId = selectedOption.dataset.id;
+                setFormData({ ...formData, marca: e.target.value });
+                setCurrentBrandId(selectedBrandId ?? '');
+                console.log(selectedBrandId, 'brandId', brands);
+                getModels(selectedBrandId ?? '');
+              }}
+              className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
+                error ? 'border-red-500' : ''
+              }`}
+            >
+              <option value="">Seleccionar Marca</option>
+              {brands.map((brand: any) => (
+                <option id={brand.id} key={brand.id} value={brand.name} data-id={brand.id}>
+                  {brand.name}
+                </option>
+              ))}
+            </select>
+            {/* MODEL */}
+            <select
+              value={formData.modelo}
+              onChange={(e) => {
+                setError('');
+                const selectedOption = e.target.selectedOptions[0];
+                const selectedBrandId = selectedOption.dataset.id;
+                setFormData({ ...formData, modelo: e.target.value });
+                setCurrentModelId(selectedBrandId ?? '');
+                getVersions(currentBrandId, selectedBrandId ?? '');
+              }}
+              className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
+                error ? 'border-red-500' : ''
+              }`}
+            >
+              <option value="">Seleccionar Modelo</option>
+              {models.map((model: any) => (
+                <option id={model.id} key={model.id} value={model.name} data-id={model.id}>
+                  {model.name}
+                </option>
+              ))}
+            </select>
+            {/* VERSION */}
+            <select
+              value={formData.version}
+              onChange={(e) => {
+                setError('');
+                setFormData({ ...formData, version: e.target.value });
+              }}
+              className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
+                error ? 'border-red-500' : ''
+              }`}
+            >
+              <option value="">Seleccionar Versión</option>
+              {versions.map((version: any) => (
+                <option key={version.id} value={version.name}>
+                  {version.name}
+                </option>
+              ))}
+            </select>
+            {/* <input
               type="text"
               value={formData.marca}
               onChange={(e) => {
@@ -113,7 +228,7 @@ export default function QuoteForm() {
               }`}
               placeholder="Ej: Toyota"
             />
-            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+            {error && <p className="text-red-500 text-sm mt-1">{error}</p>} */}
             </div>
         );
       case 2:
