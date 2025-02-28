@@ -26,7 +26,7 @@ const Intro = () => {
         <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto z-10 relative">
           Encuentra el seguro perfecto para tu vehículo con las mejores coberturas y precios del mercado.
         </p>
-        <div className="absolute inset-0 flex items-center justify-start z-0">
+        <div className="absolute inset-0 flex items-center justify-start z-0 pointer-events-none">
           {homeAnimation && <Lottie animationData={homeAnimation} style={{ width: 400, height: 400 }} />}
         </div>
         <a

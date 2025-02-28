@@ -28,6 +28,7 @@ export default function QuoteForm() {
   const [models, setModels] = useState([]);
   const [currentModelId, setCurrentModelId] = useState('');
   const [versions, setVersions] = useState([]);
+  const [disabled, setDisabled] = useState({ brand: false, model: true, version: true });
 
   const animData = () => {
     fetch('/assets/carAnimation.json')
@@ -37,11 +38,13 @@ export default function QuoteForm() {
   }
 
   const getBrands = () => {
+    setDisabled({ brand: true, model: true, version: true });
     fetch('https://api.mercadolibre.com/sites/MLA/search?category=MLA1744')
     .then(response => response.json())
     .then(data => {
       const brands = data.available_filters.find((filter: any) => filter.id === 'BRAND').values;
       setBrands(brands)
+      setDisabled({ brand: false, model: currentBrandId ? false : true, version: true });
       console.log(brands, 'brandsData')
     })
     .catch(error => console.error('Error:', error));
@@ -50,11 +53,13 @@ export default function QuoteForm() {
   const getModels = (brandId: string) => {
     console.log(brandId, 'brandId')
     if (!brandId) return;
+    setDisabled({ brand: true, model: true, version: true });
     fetch(`https://api.mercadolibre.com/sites/MLA/search?category=MLA1744&brand=${brandId}`)
     .then(response => response.json())
     .then(data => {
       const models = data.available_filters.find((filter: any) => filter.id === 'MODEL').values;
       setModels(models)
+      setDisabled({ brand: false, model: false, version: true });
       console.log(models, 'modelsData')
     })
     .catch(error => console.error('Error:', error));
@@ -62,12 +67,19 @@ export default function QuoteForm() {
 
   const getVersions = (brandId: string, modelId: string) => {
    if (!brandId || !modelId) return;
+    setDisabled({ brand: true, model: true, version: true });
     fetch(`https://api.mercadolibre.com/sites/MLA/search?category=MLA1744&brand=${brandId}&model=${modelId}`)
     .then(response => response.json())
     .then(data => {
-      const versions = data.available_filters.find((filter: any) => filter.id === 'SHORT_VERSION').values;
+      let versions = data.available_filters.find((filter: any) => filter.id === 'SHORT_VERSION');
+      if (versions) {
+        versions = versions.values;
+      } else {
+        versions = [{name: "otra"}];
+      }
       setVersions(versions)
-      console.log(versions, 'versionsData')
+      setDisabled({ brand: false, model: false, version: false });
+      console.log(data.available_filters, 'versionsData')
     })
     .catch(error => console.error('Error:', error));
   }
@@ -155,15 +167,17 @@ export default function QuoteForm() {
             </label>
             {/* BRAND */}
             <select
+              disabled={disabled.brand}
               value={formData.marca}
               onChange={(e) => {
                 setError('');
                 const selectedOption = e.target.selectedOptions[0];
                 const selectedBrandId = selectedOption.dataset.id;
-                setFormData({ ...formData, marca: e.target.value });
+                setFormData({ ...formData, marca: e.target.value, version: '' });
                 setCurrentBrandId(selectedBrandId ?? '');
                 console.log(selectedBrandId, 'brandId', brands);
                 getModels(selectedBrandId ?? '');
+                // setFormData({ ...formData, version: '' });
               }}
               className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
                 error ? 'border-red-500' : ''
@@ -178,6 +192,7 @@ export default function QuoteForm() {
             </select>
             {/* MODEL */}
             <select
+             disabled={disabled.model}
               value={formData.modelo}
               onChange={(e) => {
                 setError('');
@@ -200,6 +215,7 @@ export default function QuoteForm() {
             </select>
             {/* VERSION */}
             <select
+              disabled={disabled.version}
               value={formData.version}
               onChange={(e) => {
                 setError('');
@@ -216,6 +232,9 @@ export default function QuoteForm() {
                 </option>
               ))}
             </select>
+            { formData.version === 'otra' && (
+              <input className='w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent' placeholder='Especificar versión' />
+            )}
             {/* <input
               type="text"
               value={formData.marca}
