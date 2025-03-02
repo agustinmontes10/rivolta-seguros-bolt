@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 
@@ -7,36 +7,35 @@ export default function AdminDashboard() {
   const supabase = createClientComponentClient();
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
-  const [to, setTo] = useState("");
-  const [subject, setSubject] = useState("");
-  const [message, setMessage] = useState("");
+  const [image, setImage] = useState<File | null>(null);
   const [status, setStatus] = useState("");
 
-  // useEffect(() => {
-  //   const getUser = async () => {
-  //     const { data, error } = await supabase.auth.getUser();
-  //     if (error || !data?.user) {
-  //       router.push("/admin");
-  //     } else {
-  //       setUser(data.user);
-  //     }
-  //   };
-  //   getUser();
-  // }, [supabase, router]);
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
 
-  const sendEmail = async () => {
-    setStatus("Enviando...");
+  const uploadImage = async () => {
+    if (!image) {
+      setStatus("No hay imagen seleccionada");
+      return;
+    }
 
-    const res = await fetch("/api/send-email", {
+    setStatus("Subiendo imagen...");
+
+    const formData = new FormData();
+    formData.append("file", image);
+
+    const res = await fetch("/api/images", {
       method: "POST",
-      body: JSON.stringify({ to, subject, message }),
-      headers: { "Content-Type": "application/json" },
+      body: formData,
     });
 
     if (res.ok) {
-      setStatus("Correo enviado con éxito");
+      setStatus("Imagen subida con éxito");
     } else {
-      setStatus("Error al enviar el correo");
+      setStatus("Error al subir la imagen");
     }
   };
 
@@ -50,29 +49,14 @@ export default function AdminDashboard() {
         Cerrar sesión
       </button>
 
-      <h2 className="text-xl font-bold mb-2">Enviar Email</h2>
+      <h2 className="text-xl font-bold mb-2">Subir Imagen</h2>
       <input
-        type="email"
-        placeholder="Destinatario"
-        value={to}
-        onChange={(e) => setTo(e.target.value)}
+        type="file"
+        onChange={handleImageChange}
         className="block w-full p-2 border rounded mb-2"
       />
-      <input
-        type="text"
-        placeholder="Asunto"
-        value={subject}
-        onChange={(e) => setSubject(e.target.value)}
-        className="block w-full p-2 border rounded mb-2"
-      />
-      <textarea
-        placeholder="Mensaje"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        className="block w-full p-2 border rounded mb-2"
-      />
-      <button onClick={sendEmail} className="w-full bg-green-500 text-white p-2 rounded">
-        Enviar
+      <button onClick={uploadImage} className="w-full bg-blue-500 text-white p-2 rounded">
+        Subir Imagen
       </button>
       {status && <p className="mt-2 text-sm">{status}</p>}
     </div>
