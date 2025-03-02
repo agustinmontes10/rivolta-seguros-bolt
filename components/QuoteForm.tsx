@@ -4,15 +4,20 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 // import Lottie from 'lottie-react';
 import dynamic from "next/dynamic";
+import Coverages from "@/app/cotizar/components/StepCoverages";
+import { FormDataType } from "@/types";
+import StepSimple from "@/app/cotizar/components/StepSimple";
+import ProgressBar from "@/app/cotizar/components/ProgressBar";
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 export default function QuoteForm() {
-  const [formData, setFormData] = useState({
+
+  const [formData, setFormData] = useState<FormDataType>({
     step: 1,
     marca: "",
     modelo: "",
     version: "",
-    año: "",
+    año: 0,
     patente: "",
     nombre: "",
     email: "",
@@ -306,173 +311,20 @@ export default function QuoteForm() {
                 placeholder="Especificar versión"
               />
             )}
-            {/* <input
-              type="text"
-              value={formData.marca}
-              onChange={(e) => {
-                setError('');
-                setFormData({ ...formData, marca: e.target.value });
-              }}
-              className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
-                error ? 'border-red-500' : ''
-              }`}
-              placeholder="Ej: Toyota"
-            />
-            {error && <p className="text-red-500 text-sm mt-1">{error}</p>} */}
           </div>
         );
       case 2:
-        return (
-          <div className="space-y-4 flex flex-col justify-center items-center">
-            <label className="block text-lg font-medium text-[#152549]">
-              Año del vehículo
-            </label>
-            <input
-              type="number"
-              value={formData.año}
-              onChange={(e) => {
-                setError("");
-                setFormData({ ...formData, año: e.target.value });
-              }}
-              className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
-                error ? "border-red-500" : ""
-              }`}
-              placeholder="Ej: 2020"
-            />
-            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-          </div>
-        );
+        return <StepSimple label="Año del vehículo" stepName={"año"} typeInput={'number'} placeholder="2020" formData={formData} setFormData={setFormData} error={error} setError={setError} />
       case 3:
-        return (
-          <div className="space-y-4 flex flex-col justify-center items-center">
-            <label className="block text-lg font-medium text-[#152549]">
-              Patente
-            </label>
-            <input
-              type="text"
-              value={formData.patente}
-              onChange={(e) => {
-                setError("");
-                setFormData({ ...formData, patente: e.target.value });
-              }}
-              className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
-                error ? "border-red-500" : ""
-              }`}
-              placeholder="Ej: ABC123"
-            />
-            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-          </div>
-        );
+        return <StepSimple label="Patente" stepName={"patente"} typeInput={'text'} placeholder="ABC123" formData={formData} setFormData={setFormData} error={error} setError={setError} />
       case 4:
-        return (
-          <div className="space-y-4 flex flex-col justify-center items-center">
-            <label className="block text-lg font-medium text-[#152549]">
-              Nombre y Apellido
-            </label>
-            <input
-              type="text"
-              value={formData.nombre}
-              onChange={(e) => {
-                setError("");
-                setFormData({ ...formData, nombre: e.target.value });
-              }}
-              className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
-                error ? "border-red-500" : ""
-              }`}
-              placeholder="Ej: Juan Pérez"
-            />
-            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-          </div>
-        );
+        return <StepSimple label="Nombre y Apellido" stepName={"nombre"} typeInput={'text'} placeholder="Juan Perez" formData={formData} setFormData={setFormData} error={error} setError={setError} />
       case 5:
-        return (
-          <div className="space-y-4 flex flex-col justify-center items-center">
-            <label className="block text-lg font-medium text-[#152549]">
-              Email
-            </label>
-            <input
-              type="email"
-              value={formData.email}
-              onChange={(e) => {
-                setError("");
-                setFormData({ ...formData, email: e.target.value });
-              }}
-              className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
-                error ? "border-red-500" : ""
-              }`}
-              placeholder="Ej: juan@email.com"
-            />
-            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-          </div>
-        );
+        return <StepSimple label="Email" stepName={"email"} typeInput={'email'} placeholder="juan@email.com" formData={formData} setFormData={setFormData} error={error} setError={setError} />
       case 6:
-        return (
-          <div className="space-y-4 flex flex-col justify-center items-center">
-            <label className="block text-lg font-medium text-[#152549]">
-              Teléfono
-            </label>
-            <input
-              type="tel"
-              value={formData.telefono}
-              onChange={(e) => {
-                setError("");
-                setFormData({ ...formData, telefono: e.target.value });
-              }}
-              className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
-                error ? "border-red-500" : ""
-              }`}
-              placeholder="Ej: +54 11 1234-5678"
-            />
-            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-          </div>
-        );
+        return <StepSimple label="Teléfono" stepName={"telefono"} typeInput={'tel'} placeholder="+54 11 1234-5678" formData={formData} setFormData={setFormData} error={error} setError={setError} />
       case 7:
-        return (
-          <div className="space-y-4 flex flex-col justify-center items-center">
-            <label className="block text-lg font-medium text-[#152549]">
-              Tipo de Seguro
-            </label>
-            <select
-              value={formData.tipoSeguro}
-              onChange={(e) => {
-                setError("");
-                setFormData({ ...formData, tipoSeguro: e.target.value });
-              }}
-              className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
-                error ? "border-red-500" : ""
-              }`}
-            >
-              <option value="">Seleccionar tipo de seguro</option>
-              <option value="Terceros básico">Terceros básico</option>
-              <option value="Terceros completo">Terceros completo</option>
-              <option value="Todo riesgo">Todo riesgo</option>
-            </select>
-            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-
-            {/* Checkbox para suscribirse al newsletter */}
-            <div className="flex items-center space-x-2 mb-4">
-              <input
-                type="checkbox"
-                id="subscribeNewsletter"
-                checked={formData.subscribeNewsletter || false}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    subscribeNewsletter: e.target.checked,
-                  })
-                }
-                className="w-4 h-4 text-[#3ec1d3] border-gray-300 rounded focus:ring-[#3ec1d3]"
-              />
-              <label
-                htmlFor="subscribeNewsletter"
-                className="text-sm text-gray-600"
-              >
-                Mantente informado. Suscríbete a nuestro newsletter para recibir
-                las últimas novedades y ofertas especiales.
-              </label>
-            </div>
-          </div>
-        );
+        return <Coverages formData={formData} setFormData={setFormData} error={error} yearVehicle={formData.año}/>;
       default:
         return null;
     }
@@ -480,32 +332,7 @@ export default function QuoteForm() {
 
   return (
     <div className="bg-white p-8 rounded-lg shadow-xl shadow-gray-300 mb-8">
-      <div className="mb-8 mt-3">
-        <div className="h-2 bg-gray-200 rounded-full">
-          <motion.div
-            className="h-full bg-[#3ec1d3] rounded-full"
-            initial={{ width: 0 }}
-            animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.5 }}
-          />
-        </div>
-        <div className="relative mt-2">
-          <motion.div
-            className="absolute"
-            initial={{ left: 0 }}
-            animate={{ left: `${progress}%` }}
-            transition={{ duration: 0.5 }}
-            style={{ transform: "translateY(-65%) translateX(-75%)" }}
-          >
-            {animationData && (
-              <Lottie
-                animationData={animationData}
-                style={{ width: 120, height: 120 }}
-              />
-            )}
-          </motion.div>
-        </div>
-      </div>
+      <ProgressBar animationData={animationData} progress={progress}  />
 
       <motion.div
         key={formData.step}
