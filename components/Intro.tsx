@@ -18,25 +18,33 @@ const Intro = () => {
   
   
   return (
-    <section className="intro-section flex items-center justify-center text-white pt-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h1 className="text-4xl md:text-6xl font-bold mb-6 z-10 relative">
-          Tu seguridad es nuestra prioridad
-        </h1>
-        <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto z-10 relative">
-          Encuentra el seguro perfecto para tu vehículo con las mejores coberturas y precios del mercado.
-        </p>
-        <div className="absolute inset-0 flex items-center justify-start z-0 pointer-events-none">
-          {homeAnimation && <Lottie animationData={homeAnimation} style={{ width: 400, height: 400 }} />}
-        </div>
-        <a
-          href="/cotizar"
-          className="inline-block bg-[#3ec1d3] text-white px-8 py-4 rounded-md text-lg font-semibold hover:bg-[#36adbf] transition-colors"
-        >
-          Cotizar ahora
-        </a>
-      </div>
+    <>
+    <section className="flex flex-col justify-around intro-section flex items-center justify-center text-white pt-16">
+    <div className="flex justify-center md:justify-start">
+  {/* Lottie animation (visible on medium screens and larger) */}
+  <div className="hidden md:flex items-center justify-center z-0 pointer-events-none">
+    {homeAnimation && <Lottie animationData={homeAnimation} style={{ height: '40vw', maxHeight: '400px' }} />}
+  </div>
+
+  {/* Text content */}
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center text-center md:text-left">
+    <h1 className="text-4xl md:text-[3vw] font-bold mb-6 z-10 relative">
+      Tu seguridad es nuestra prioridad
+    </h1>
+    <p className="text-xl md:text-[2vw] mb-8 max-w-3xl z-10 relative">
+      Encuentra el seguro perfecto para tu vehículo con las mejores coberturas y precios del mercado.
+    </p>
+  </div>
+</div>
+
+    <a
+    href="/cotizar"
+    className="inline-block bg-[#3ec1d3] text-white px-8 py-4 rounded-md text-lg font-semibold hover:bg-[#36adbf] transition-colors"
+  >
+    Cotizar ahora
+  </a>
     </section>
+    </>
   );
 };
 
