@@ -1,64 +1,77 @@
 "use client";
 import { useState } from "react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useRouter } from "next/navigation";
+import { createClient } from "@supabase/supabase-js";
 
-export default function AdminDashboard() {
-  const supabase = createClientComponentClient();
-  const router = useRouter();
-  const [user, setUser] = useState<any>(null);
-  const [image, setImage] = useState<File | null>(null);
-  const [status, setStatus] = useState("");
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
+
+export default function OfertaForm() {
+  const [titulo, setTitulo] = useState("");
+  const [descripcion, setDescripcion] = useState("");
+  const [imagen, setImagen] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setImage(e.target.files[0]);
+      setImagen(e.target.files[0]);
     }
   };
 
-  const uploadImage = async () => {
-    if (!image) {
-      setStatus("No hay imagen seleccionada");
-      return;
-    }
-
-    setStatus("Subiendo imagen...");
-
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
     const formData = new FormData();
-    formData.append("file", image);
-
-    const res = await fetch("/api/images", {
+    formData.append("titulo", titulo);
+    formData.append("descripcion", descripcion);
+    if (imagen) {
+      formData.append("imagen", imagen); // Asegúrate de que sea un archivo
+    }
+  
+    const res = await fetch("/api/offers", {
       method: "POST",
       body: formData,
     });
-
+  
+    const data = await res.json();
     if (res.ok) {
-      setStatus("Imagen subida con éxito");
+      alert("Oferta guardada con éxito!");
     } else {
-      setStatus("Error al subir la imagen");
+      alert("Error: " + data.error);
     }
   };
 
   return (
-    <div className="p-6 max-w-lg mx-auto bg-white shadow-md rounded-lg">
-      <h1 className="text-2xl font-bold mb-4">Bienvenido, Admin</h1>
-      <button 
-        onClick={() => supabase.auth.signOut().then(() => router.push("/admin"))} 
-        className="mb-4 p-2 bg-red-500 text-white rounded"
-      >
-        Cerrar sesión
-      </button>
-
-      <h2 className="text-xl font-bold mb-2">Subir Imagen</h2>
+    <form onSubmit={handleSubmit} className="space-y-4 p-4 border rounded-lg">
+      <input
+        type="text"
+        placeholder="Título"
+        value={titulo}
+        onChange={(e) => setTitulo(e.target.value)}
+        className="w-full p-2 border rounded"
+        required
+      />
+      <textarea
+        placeholder="Descripción"
+        value={descripcion}
+        onChange={(e) => setDescripcion(e.target.value)}
+        className="w-full p-2 border rounded"
+        required
+      />
       <input
         type="file"
+        accept="image/*"
         onChange={handleImageChange}
-        className="block w-full p-2 border rounded mb-2"
+        className="w-full p-2 border rounded"
+        required
       />
-      <button onClick={uploadImage} className="w-full bg-blue-500 text-white p-2 rounded">
-        Subir Imagen
+      <button
+        type="submit"
+        className="w-full bg-blue-500 text-white py-2 rounded"
+        disabled={loading}
+      >
+        {loading ? "Guardando..." : "Guardar Oferta"}
       </button>
-      {status && <p className="mt-2 text-sm">{status}</p>}
-    </div>
+    </form>
   );
 }
