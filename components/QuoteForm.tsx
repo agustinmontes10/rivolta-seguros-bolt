@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, KeyboardEvent } from "react";
 import { motion } from "framer-motion";
 // import Lottie from 'lottie-react';
 import dynamic from "next/dynamic";
@@ -11,7 +11,6 @@ import ProgressBar from "@/app/cotizar/components/ProgressBar";
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 export default function QuoteForm() {
-
   const [formData, setFormData] = useState<FormDataType>({
     step: 1,
     marca: "",
@@ -202,6 +201,18 @@ export default function QuoteForm() {
     }
   };
 
+  // Manejador de eventos para la tecla Enter
+  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (formData.step < totalSteps) {
+        handleNext();
+      } else {
+        handleSubmit();
+      }
+    }
+  };
+
   useEffect(() => {
     setIsClient(true);
     animData();
@@ -314,25 +325,91 @@ export default function QuoteForm() {
           </div>
         );
       case 2:
-        return <StepSimple label="Año del vehículo" stepName={"año"} typeInput={'number'} placeholder="2020" formData={formData} setFormData={setFormData} error={error} setError={setError} />
+        return (
+          <StepSimple
+            label="Año del vehículo"
+            stepName={"año"}
+            typeInput={"number"}
+            placeholder="2020"
+            formData={formData}
+            setFormData={setFormData}
+            error={error}
+            setError={setError}
+          />
+        );
       case 3:
-        return <StepSimple label="Patente" stepName={"patente"} typeInput={'text'} placeholder="ABC123" formData={formData} setFormData={setFormData} error={error} setError={setError} />
+        return (
+          <StepSimple
+            label="Patente"
+            stepName={"patente"}
+            typeInput={"text"}
+            placeholder="ABC123"
+            formData={formData}
+            setFormData={setFormData}
+            error={error}
+            setError={setError}
+          />
+        );
       case 4:
-        return <StepSimple label="Nombre y Apellido" stepName={"nombre"} typeInput={'text'} placeholder="Juan Perez" formData={formData} setFormData={setFormData} error={error} setError={setError} />
+        return (
+          <StepSimple
+            label="Nombre y Apellido"
+            stepName={"nombre"}
+            typeInput={"text"}
+            placeholder="Juan Perez"
+            formData={formData}
+            setFormData={setFormData}
+            error={error}
+            setError={setError}
+          />
+        );
       case 5:
-        return <StepSimple label="Email" stepName={"email"} typeInput={'email'} placeholder="juan@email.com" formData={formData} setFormData={setFormData} error={error} setError={setError} />
+        return (
+          <StepSimple
+            label="Email"
+            stepName={"email"}
+            typeInput={"email"}
+            placeholder="juan@email.com"
+            formData={formData}
+            setFormData={setFormData}
+            error={error}
+            setError={setError}
+          />
+        );
       case 6:
-        return <StepSimple label="Teléfono" stepName={"telefono"} typeInput={'tel'} placeholder="+54 11 1234-5678" formData={formData} setFormData={setFormData} error={error} setError={setError} />
+        return (
+          <StepSimple
+            label="Teléfono"
+            stepName={"telefono"}
+            typeInput={"tel"}
+            placeholder="+54 11 1234-5678"
+            formData={formData}
+            setFormData={setFormData}
+            error={error}
+            setError={setError}
+          />
+        );
       case 7:
-        return <Coverages formData={formData} setFormData={setFormData} error={error} yearVehicle={formData.año}/>;
+        return (
+          <Coverages
+            formData={formData}
+            setFormData={setFormData}
+            error={error}
+            yearVehicle={formData.año}
+          />
+        );
       default:
         return null;
     }
   };
 
   return (
-    <div className="bg-white p-8 rounded-lg shadow-xl shadow-gray-300 mb-8">
-      <ProgressBar animationData={animationData} progress={progress}  />
+    <div
+      className="bg-white p-8 rounded-lg shadow-xl shadow-gray-300 mb-8"
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+    >
+      <ProgressBar animationData={animationData} progress={progress} />
 
       <motion.div
         key={formData.step}
