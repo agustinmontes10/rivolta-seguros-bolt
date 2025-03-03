@@ -16,6 +16,19 @@ const Products = () => {
   }, []);
 
 
+  const sendMessage = (titulo: string, descripcion: string) => {
+    const message = `
+        ¡Hola! Estoy interesado en la oferta de ${titulo} que vi en su página web.
+        Descripcion: ${descripcion}`;
+
+    const whatsappUrl = `https://wa.me/2983569503?text=${encodeURIComponent(
+      message
+    )}`;
+    // if (isClient) {
+    window.open(whatsappUrl, "_blank");
+    // }
+  }
+
 
   return (
     <section id="products" className="py-20 bg-gray-50">
@@ -23,14 +36,19 @@ const Products = () => {
         <h2 className="text-3xl font-bold text-center text-[#152549] mb-12">
           Nuestras Ofertas
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <div className="flex overflow-x-auto space-x-8 pt-4 pb-8">
           {ofertas && ofertas.map((oferta: any) => (
-            <div key={oferta.id} className="bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform hover:scale-105 h-[50vh]">
-              <div className="rounded-lg shadow-lg overflow-hidden transform transition-transform h-[80%] bg-no-repeat bg-contain bg-center hover:scale-105" style={{ backgroundImage: `url(${oferta.imagen})`}}></div>
-              {/* <img src={oferta.imagen} alt={oferta.titulo} className="w-full h-auto" /> */}
-              <div className="p-4">
-                <h3 className="text-lg font-bold text-gray-800 mb-2">{oferta.tiutlo}</h3>
-                <p className="text-gray-600 text-sm mb-2">{oferta.descripcion}</p>
+            <div key={oferta.id} className="flex-none w-64 bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform hover:scale-105">
+              <div className="h-60 bg-no-repeat bg-contain bg-center" style={{ backgroundImage: `url(${oferta.imagen})` }}></div>
+              <div className="p-4 flex flex-col justify-between h-40">
+                <div>
+                  <h3 className="text-lg font-bold text-gray-800 mb-2">{oferta.titulo}</h3>
+                  <p className="text-gray-600 text-sm mb-2">{oferta.descripcion}</p>
+                </div>
+                <button className="bg-green-500 flex items-center gap-3 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-2" onClick={() => sendMessage(oferta.titulo, oferta.descripcion)}>
+                  Mas información
+                  <img src="/assets/icon-whatsapp.png" alt="" className="w-[30px]" />
+                </button>
               </div>
             </div>
           ))}
