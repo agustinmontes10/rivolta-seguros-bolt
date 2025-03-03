@@ -26,7 +26,7 @@ const Products = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {ofertas && ofertas.map((oferta: any) => (
             <div key={oferta.id} className="bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform hover:scale-105 h-[50vh]">
-              <div className="rounded-lg shadow-lg overflow-hidden transform transition-transform h-[80%] bg-no-repeat bg-cover bg-center hover:scale-105" style={{ backgroundImage: `url(${oferta.imagen})`}}></div>
+              <div className="rounded-lg shadow-lg overflow-hidden transform transition-transform h-[80%] bg-no-repeat bg-contain bg-center hover:scale-105" style={{ backgroundImage: `url(${oferta.imagen})`}}></div>
               {/* <img src={oferta.imagen} alt={oferta.titulo} className="w-full h-auto" /> */}
               <div className="p-4">
                 <h3 className="text-lg font-bold text-gray-800 mb-2">{oferta.tiutlo}</h3>
