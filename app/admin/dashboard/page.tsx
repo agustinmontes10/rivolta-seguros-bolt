@@ -15,30 +15,39 @@ export default function OfertaForm() {
   const [visible, setVisible] = useState(false);
   const [offers, setOffers] = useState<any[]>([]);
   const [offerSelected, setOfferSelected] = useState<any>();
-  const [popUpMode, setPopUpMode] = useState<"add" | "edit">("add");
+  const [popUpMode, setPopUpMode] = useState<"add" | "edit" | "delete">("add");
 
-  const handleSubmit = async (e: any, adData: any) => {
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, adData: any) => {
     e.preventDefault();
-    const { title, description, image } = adData;
+  
+    const { id, title, description, image } = adData;
     const formData = new FormData();
+    formData.append("id", id);
     formData.append("titulo", title);
     formData.append("descripcion", description);
-    if (image) {
-      formData.append("imagen", image); // Ensure it's a file
-    }
-    const res = await fetch("/api/offers", {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await res.json();
-    if (res.ok) {
-      getOffers();
-      alert("Oferta guardada con éxito!");
-    } else {
-      alert("Error: " + data.error);
+    if (image) formData.append("imagen", image); // Ensure it's a file
+  
+    const method = popUpMode === "delete" ? "DELETE" : popUpMode === "edit" ? "PUT" : "POST";
+  
+    try {
+      const res = await fetch("/api/offers", { method, body: formData });
+      const data = await res.json();
+      
+      if (res.ok) {
+        getOffers();
+        alert(`Oferta ${popUpMode === "delete" ? "eliminada" : popUpMode === "edit" ? "editada" : "guardada"} con éxito!`);
+      } else {
+        throw new Error(data.error);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(`Error: ${error.message}`);
+      } else {
+        alert("An unknown error occurred.");
+      }
     }
   };
+  
 
   const getOffers = async () => {
     const { data: offers, error } = await supabase.from("ofertas").select("*");
@@ -81,9 +90,9 @@ export default function OfertaForm() {
                 <td className="py-3 px-5 text-center">{offer.descripcion}</td>
                 <td className="py-3 px-5 text-center">
                   <img
-                  src={offer.imagen}
-                  alt=""
-                  className="h-16 w-16 object-cover mx-auto transition-transform duration-200 hover:scale-150"
+                    src={offer.imagen}
+                    alt=""
+                    className="h-16 w-16 object-cover mx-auto transition-transform duration-200 hover:scale-150"
                   />
                 </td>
                 <td className="py-3 px-5 text-center">
@@ -99,7 +108,9 @@ export default function OfertaForm() {
                   </button>
                   <button
                     onClick={() => {
-                      // Implement delete functionality
+                      setPopUpMode("delete");
+                      setOfferSelected(offer);
+                      setVisible(true);
                     }}
                     className="p-2 bg-red-500 hover:bg-red-600 text-white rounded transition duration-200"
                   >

@@ -4,7 +4,7 @@
     // Deshabilitar advertencias específicas
     "no-console": "off", // Deshabilitar advertencias de console.log
     "react/prop-types": "off", // Deshabilitar advertencias de prop-types en componentes de React
-    "@typescript-eslint/no-explicit-any": "off", // Deshabilitar advertencias de uso de 'any' en TypeScript
+    "@typescript-eslint/no-explicit-any": "off" // Deshabilitar advertencias de uso de 'any' en TypeScript
     // Mantener reglas que generan errores
     // "no-unused-vars": "error", // Cambiar advertencias de variables no usadas a errores
     // "@typescript-eslint/no-unused-vars": "error" // Cambiar advertencias de variables no usadas en TypeScript a errores

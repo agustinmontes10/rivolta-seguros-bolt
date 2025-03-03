@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
 type PopUpProps = {
-  onSubmit: (e: React.MouseEvent<HTMLButtonElement>, adData: { title: string; description: string; image: File | null }) => void;
-  key: "add" | "edit";
-  mode: "add" | "edit";
+  onSubmit: (e: React.MouseEvent<HTMLButtonElement>, adData: { title: string; description: string; image: File | null, id: string }) => void;
+  key: "add" | "edit" | "delete";
+  mode: "add" | "edit" | "delete";
   onClose: () => void;
   currentData: any;
 };
@@ -12,6 +12,7 @@ const PopUp: React.FC<PopUpProps> = ({ key, mode, onSubmit, onClose, currentData
   const [title, setTitle] = useState(currentData?.titulo ?? '');
   const [description, setDescription] = useState(currentData?.descripcion ?? '');
   const [image, setImage] = useState<File | null>(currentData?.imagen ?? '');
+  const [id, setId] = useState<string>(currentData?.id ?? '');
 
   const handleImageDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -22,12 +23,13 @@ const PopUp: React.FC<PopUpProps> = ({ key, mode, onSubmit, onClose, currentData
   };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    onSubmit(e, { title, description, image });
+    onSubmit(e, { title, description, image, id });
   };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70">
       <div className="bg-gray-800 p-6 rounded-2xl shadow-xl w-96">
+       { mode !== 'delete' ? <>
         <h2 className="text-2xl font-semibold text-white mb-4">
           {mode === 'edit' ? 'Edit Publication' : 'Add Publication'}
         </h2>
@@ -80,12 +82,12 @@ const PopUp: React.FC<PopUpProps> = ({ key, mode, onSubmit, onClose, currentData
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           className="w-full p-2 mb-4 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"
-        />
+        /></> : <h2 className="text-2xl font-semibold text-white mb-4 text-center">Seguro quieres eliminar {title}?</h2>}
         <button
           onClick={(e) => handleSubmit(e)}
           className="w-full bg-blue-600 text-white p-2 rounded-lg mb-2 transition-all hover:bg-blue-500"
         >
-          {mode === 'edit' ? 'Save Changes' : 'Add Publication'}
+          {mode === 'edit' ? 'Save Changes' : mode === 'add' ? 'Add Publication' : 'Delete'}
         </button>
         <button
           onClick={() => {
