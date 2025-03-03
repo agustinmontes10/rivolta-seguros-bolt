@@ -1,31 +1,21 @@
+"use client"
+import { useEffect, useState } from "react";
+
 const Products = () => {
-  const products = [
-    {
-      id: 1,
-      image: 'assets/posts/post1.jpeg',
-      name: 'Producto 1',
-      description: 'Descripción de la oferta 1',
-    },
-    {
-      id: 2,
-      image: 'assets/posts/post1.jpeg',
-      name: 'Producto 2',
-      description: 'Descripción de la oferta 2',
-    },
-    {
-      id: 3,
-      image: 'assets/posts/post1.jpeg',
-      name: 'Producto 3',
-      description: 'Descripción de la oferta 3',
-    },
-    {
-      id: 4,
-      image: 'assets/posts/post1.jpeg',
-      name: 'Producto 4',
-      description: 'Descripción de la oferta 4',
-    },
-    // Puedes agregar más productos aquí
-  ];
+  const [ofertas, setOfertas] = useState<any[]>([])
+
+  const fetchOfertas = async () => {
+    const res = await fetch("/api/offers");
+    const data = await res.json();
+    setOfertas(data.ofertas);
+    // return data.ofertas;
+  };
+
+  useEffect(() => {
+    fetchOfertas();
+  }, []);
+
+
 
   return (
     <section id="products" className="py-20 bg-gray-50">
@@ -34,12 +24,12 @@ const Products = () => {
           Nuestras Ofertas
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {products.map((product) => (
-            <div key={product.id} className="bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform hover:scale-105">
-              <img src={product.image} alt={product.name} className="w-full h-auto" />
+          {ofertas && ofertas.map((oferta: any) => (
+            <div key={oferta.id} className="bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform hover:scale-105">
+              <img src={oferta.imagen} alt={oferta.titulo} className="w-full h-auto" />
               <div className="p-4">
-                <h3 className="text-lg font-bold text-gray-800 mb-2">{product.name}</h3>
-                <p className="text-gray-600 text-sm mb-2">{product.description}</p>
+                <h3 className="text-lg font-bold text-gray-800 mb-2">{oferta.tiutlo}</h3>
+                <p className="text-gray-600 text-sm mb-2">{oferta.descripcion}</p>
               </div>
             </div>
           ))}
