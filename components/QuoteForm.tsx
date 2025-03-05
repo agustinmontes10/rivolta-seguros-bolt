@@ -16,7 +16,7 @@ export default function QuoteForm() {
     marca: "",
     modelo: "",
     version: "",
-    año: 0,
+    año: null,
     patente: "",
     nombre: "",
     email: "",
@@ -114,7 +114,6 @@ export default function QuoteForm() {
     const formKeys = [
       "step",
       "marca",
-      "modelo",
       "año",
       "patente",
       "nombre",
@@ -123,6 +122,17 @@ export default function QuoteForm() {
       "tipoSeguro",
     ] as const;
     const currentValue = formData[formKeys[formData.step]] as string;
+
+    if(formData.step == 1) {
+      const modeloValue = formData.modelo;
+      const versionValue = formData.version;
+      if (!modeloValue || !versionValue) {
+        setError("Por favor seleccione una marca, modelo y versión");
+        return false;
+      }
+    }
+    console.log('currentValue', currentValue);
+    console.log('step', formData.step)
     if (!currentValue) {
       setError("Este campo es requerido");
       return false;
@@ -395,7 +405,7 @@ export default function QuoteForm() {
             formData={formData}
             setFormData={setFormData}
             error={error}
-            yearVehicle={formData.año}
+            yearVehicle={formData.año as number}
           />
         );
       default:
