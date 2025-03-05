@@ -28,10 +28,10 @@ const Intro = () => {
 
   {/* Text content */}
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center text-center md:text-left">
-    <h1 className="text-4xl md:text-[3vw] font-bold mb-6 z-10 relative">
+    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 z-10 relative">
       Tu seguridad es nuestra prioridad
     </h1>
-    <p className="text-xl md:text-[2vw] mb-8 max-w-3xl z-10 relative">
+    <p className="text-xl md:text-2xl mb-8 max-w-3xl z-10 relative">
       Encuentra el seguro perfecto para tu vehículo con las mejores coberturas y precios del mercado.
     </p>
   </div>
