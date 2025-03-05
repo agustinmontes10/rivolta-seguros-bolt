@@ -1,8 +1,11 @@
 "use client"
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 const Products = () => {
-  const [ofertas, setOfertas] = useState<any[]>([])
+  const [ofertas, setOfertas] = useState<any[]>([]);
+  const [animationData, setAnimationData] = useState(null);
 
   const fetchOfertas = async () => {
     const res = await fetch("/api/offers");
@@ -10,11 +13,19 @@ const Products = () => {
     setOfertas(data.ofertas);
     // return data.ofertas;
   };
+ 
+  const animData = () => {
+    fetch("/assets/loadingOffers1.json")
+      .then((response) => response.json())
+      .then((data) => setAnimationData(data))
+      .catch((error) => console.error("Error loading animation:", error));
+  };
 
   useEffect(() => {
     fetchOfertas();
+    animData();
   }, []);
-
+ 
 
   const sendMessage = (titulo: string, descripcion: string) => {
     const message = `
@@ -36,8 +47,8 @@ const Products = () => {
         <h2 className="text-3xl font-bold text-center text-[#152549] mb-12">
           Nuestras Ofertas
         </h2>
-        <div className="flex overflow-x-auto space-x-8 pt-4 pb-8">
-          {ofertas && ofertas.map((oferta: any) => (
+        <div className="flex overflow-x-auto space-x-8 pt-4 pb-8 justify-center">
+          {ofertas.length ? ofertas.map((oferta: any) => (
             <div key={oferta.id} className="flex-none w-64 bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform hover:scale-105">
               <div className="h-60 bg-no-repeat bg-contain bg-center" style={{ backgroundImage: `url(${oferta.imagen})` }}></div>
               <div className="p-4 flex flex-col justify-between h-40">
@@ -51,8 +62,16 @@ const Products = () => {
                 </button>
               </div>
             </div>
-          ))}
-        </div>
+          ))
+            : (
+              <div className="flex justify-center items-center h-[200px]">
+                <Lottie
+                  animationData={animationData}
+                  style={{ width: "100%" , height:"100%"}}
+                />
+              </div>
+            )}
+          </div>
       </div>
     </section>
   );
