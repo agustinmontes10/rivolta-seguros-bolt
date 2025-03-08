@@ -10,6 +10,8 @@ import StepSimple from "@/app/cotizar/components/StepSimple";
 import ProgressBar from "@/app/cotizar/components/ProgressBar";
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
+const ACCESS_TOKEN = process.env.NEXT_PUBLIC_MELI_ACCESS_TOKEN;
+
 export default function QuoteForm() {
   const [formData, setFormData] = useState<FormDataType>({
     step: 1,
@@ -48,7 +50,7 @@ export default function QuoteForm() {
 
   const getBrands = () => {
     setDisabled({ brand: true, model: true, version: true });
-    fetch("https://api.mercadolibre.com/sites/MLA/search?category=MLA1744")
+    fetch("/api/vehicles")
       .then((response) => response.json())
       .then((data) => {
         const brands = data.available_filters.find(
@@ -69,9 +71,7 @@ export default function QuoteForm() {
     console.log(brandId, "brandId");
     if (!brandId) return;
     setDisabled({ brand: true, model: true, version: true });
-    fetch(
-      `https://api.mercadolibre.com/sites/MLA/search?category=MLA1744&brand=${brandId}`
-    )
+    fetch(`/api/vehicles?brandId=${brandId}`)
       .then((response) => response.json())
       .then((data) => {
         const models = data.available_filters.find(
@@ -87,9 +87,7 @@ export default function QuoteForm() {
   const getVersions = (brandId: string, modelId: string) => {
     if (!brandId || !modelId) return;
     setDisabled({ brand: true, model: true, version: true });
-    fetch(
-      `https://api.mercadolibre.com/sites/MLA/search?category=MLA1744&brand=${brandId}&model=${modelId}`
-    )
+    fetch(`/api/vehicles?brandId=${brandId}&modelId=${modelId}`)
       .then((response) => response.json())
       .then((data) => {
         let versions = data.available_filters.find(
@@ -321,9 +319,9 @@ export default function QuoteForm() {
             >
               <option value="">Seleccionar Versión</option>
               {versions.map((version: any) => (
-                <option key={version.id} value={version.name}>
-                  {version.name}
-                </option>
+                <option key={version.id || version.name} value={version.name}>
+                {version.name}
+              </option>              
               ))}
             </select>
             {formData.version === "otra" && (
