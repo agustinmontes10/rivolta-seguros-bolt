@@ -175,7 +175,7 @@ export default function QuoteForm() {
         Tipo de Seguro: ${formData.tipoSeguro}
       `;
 
-      const whatsappUrl = `https://wa.me/1234567890?text=${encodeURIComponent(
+      const whatsappUrl = `https://wa.me/2983341123?text=${encodeURIComponent(
         message
       )}`;
       if (isClient) {
