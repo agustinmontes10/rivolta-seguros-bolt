@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const coverturasJSON = {
     "aseguradoras": [
         {
@@ -35,6 +37,7 @@ interface StepCoveragesProps {
 }
 
 const StepCoverages: React.FC<StepCoveragesProps> = ({ yearVehicle, formData, setFormData, error }) => {
+    const [isSelected, setIsSelected] = useState('');
     const yearNow = new Date().getFullYear();
     const antique = yearNow - yearVehicle;
 
@@ -52,15 +55,20 @@ const StepCoverages: React.FC<StepCoveragesProps> = ({ yearVehicle, formData, se
             <label className="block text-lg font-medium text-[#152549]">
                 Coberturas disponibles
             </label>
-            <div className="w-full overflow-x-auto">
+            <div className="w-full overflow-x-auto pb-4">
                 <div className="flex space-x-4">
                     {getCoverages().map((aseguradora, index) => (
                         aseguradora.coberturas.map((cobertura, idx) => (
                             <div
                                 key={`${index}-${idx}`}
-                                className="min-w-[200px] p-4 cursor-pointer bg-white border border-[#152549] rounded-md shadow-md hover:bg-[#152549] hover:text-white transition-colors"
+                                className={`min-w-[200px] p-4 cursor-pointer border rounded-md shadow-md  transition-colors
+                                        ${isSelected === `${index}-${idx}` ? 'bg-[#152549] text-gray-600 border-gray-600' : 'bg-white border-[#152549]'}`}
+                                onClick={() => {
+                                    setFormData({ ...formData, tipoSeguro: `${aseguradora.nombre} - ${cobertura}` })
+                                    setIsSelected(`${index}-${idx}`)
+                                }}
                             >
-                                <p className="text-sm font-medium text-gray-800">
+                                <p className={`text-sm font-medium ${isSelected === `${index}-${idx}` ? 'text-gray-200' : 'text-gray-800'}`}>
                                     {aseguradora.nombre} - {cobertura}
                                 </p>
                             </div>
@@ -82,13 +90,13 @@ const StepCoverages: React.FC<StepCoveragesProps> = ({ yearVehicle, formData, se
                             subscribeNewsletter: e.target.checked,
                         })
                     }
-                    className="w-4 h-4 text-[#3ec1d3] border-gray-300 rounded focus:ring-[#3ec1d3]"
+                    className="w-12 h-12 md:w-4 md:h-4 text-[#3ec1d3] border-gray-300 rounded focus:ring-[#3ec1d3]"
                 />
                 <label
                     htmlFor="subscribeNewsletter"
                     className="text-sm text-gray-600"
                 >
-                    Mantente informado. Suscríbete a nuestro newsletter para recibir
+                    Suscríbete a nuestro newsletter para recibir
                     las últimas novedades y ofertas especiales.
                 </label>
             </div>
