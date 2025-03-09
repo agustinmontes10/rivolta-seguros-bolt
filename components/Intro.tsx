@@ -19,7 +19,7 @@ const Intro = () => {
 
   return (
     <>
-      <section className="flex flex-col justify-around intro-section items-center text-white pt-16">
+      <section className="flex flex-col justify-around intro-section items-center text-white pt-16 pb-10">
         <div className="flex flex-col md:flex-row justify-center md:justify-start">
           {/* Lottie animation (visible on medium screens and larger) */}
           <div className="flex items-center justify-center z-0 pointer-events-none">
