@@ -54,3 +54,19 @@ body {
 .card-hover:hover {
   transform: translateY(-5px);
 }
+
+::-webkit-scrollbar {
+  width: 10px; /* Ancho del scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #d1d5dc; /* Color del fondo del scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #152549; /* Color del "pulgar" (parte que se arrastra) */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #1a2d5a; /* Color cuando pasas el mouse sobre el scrollbar */
+}

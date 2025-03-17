@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, KeyboardEvent } from "react";
 import { motion } from "framer-motion";
 // import Lottie from 'lottie-react';
 import dynamic from "next/dynamic";
@@ -10,14 +10,15 @@ import StepSimple from "@/app/cotizar/components/StepSimple";
 import ProgressBar from "@/app/cotizar/components/ProgressBar";
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
-export default function QuoteForm() {
+const ACCESS_TOKEN = process.env.NEXT_PUBLIC_MELI_ACCESS_TOKEN;
 
+export default function QuoteForm() {
   const [formData, setFormData] = useState<FormDataType>({
     step: 1,
     marca: "",
     modelo: "",
     version: "",
-    año: 0,
+    año: null,
     patente: "",
     nombre: "",
     email: "",
@@ -49,7 +50,7 @@ export default function QuoteForm() {
 
   const getBrands = () => {
     setDisabled({ brand: true, model: true, version: true });
-    fetch("https://api.mercadolibre.com/sites/MLA/search?category=MLA1744")
+    fetch("/api/vehicles")
       .then((response) => response.json())
       .then((data) => {
         const brands = data.available_filters.find(
@@ -70,9 +71,7 @@ export default function QuoteForm() {
     console.log(brandId, "brandId");
     if (!brandId) return;
     setDisabled({ brand: true, model: true, version: true });
-    fetch(
-      `https://api.mercadolibre.com/sites/MLA/search?category=MLA1744&brand=${brandId}`
-    )
+    fetch(`/api/vehicles?brandId=${brandId}`)
       .then((response) => response.json())
       .then((data) => {
         const models = data.available_filters.find(
@@ -88,9 +87,7 @@ export default function QuoteForm() {
   const getVersions = (brandId: string, modelId: string) => {
     if (!brandId || !modelId) return;
     setDisabled({ brand: true, model: true, version: true });
-    fetch(
-      `https://api.mercadolibre.com/sites/MLA/search?category=MLA1744&brand=${brandId}&model=${modelId}`
-    )
+    fetch(`/api/vehicles?brandId=${brandId}&modelId=${modelId}`)
       .then((response) => response.json())
       .then((data) => {
         let versions = data.available_filters.find(
@@ -115,7 +112,6 @@ export default function QuoteForm() {
     const formKeys = [
       "step",
       "marca",
-      "modelo",
       "año",
       "patente",
       "nombre",
@@ -124,6 +120,17 @@ export default function QuoteForm() {
       "tipoSeguro",
     ] as const;
     const currentValue = formData[formKeys[formData.step]] as string;
+
+    if(formData.step == 1) {
+      const modeloValue = formData.modelo;
+      const versionValue = formData.version;
+      if (!modeloValue || !versionValue) {
+        setError("Por favor seleccione una marca, modelo y versión");
+        return false;
+      }
+    }
+    console.log('currentValue', currentValue);
+    console.log('step', formData.step)
     if (!currentValue) {
       setError("Este campo es requerido");
       return false;
@@ -168,7 +175,7 @@ export default function QuoteForm() {
         Tipo de Seguro: ${formData.tipoSeguro}
       `;
 
-      const whatsappUrl = `https://wa.me/1234567890?text=${encodeURIComponent(
+      const whatsappUrl = `https://wa.me/2983341123?text=${encodeURIComponent(
         message
       )}`;
       if (isClient) {
@@ -198,6 +205,18 @@ export default function QuoteForm() {
         } catch (error) {
           console.error("Error al suscribir:", error);
         }
+      }
+    }
+  };
+
+  // Manejador de eventos para la tecla Enter
+  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (formData.step < totalSteps) {
+        handleNext();
+      } else {
+        handleSubmit();
       }
     }
   };
@@ -300,9 +319,9 @@ export default function QuoteForm() {
             >
               <option value="">Seleccionar Versión</option>
               {versions.map((version: any) => (
-                <option key={version.id} value={version.name}>
-                  {version.name}
-                </option>
+                <option key={version.id || version.name} value={version.name}>
+                {version.name}
+              </option>              
               ))}
             </select>
             {formData.version === "otra" && (
@@ -314,25 +333,91 @@ export default function QuoteForm() {
           </div>
         );
       case 2:
-        return <StepSimple label="Año del vehículo" stepName={"año"} typeInput={'number'} placeholder="2020" formData={formData} setFormData={setFormData} error={error} setError={setError} />
+        return (
+          <StepSimple
+            label="Año del vehículo"
+            stepName={"año"}
+            typeInput={"number"}
+            placeholder="2020"
+            formData={formData}
+            setFormData={setFormData}
+            error={error}
+            setError={setError}
+          />
+        );
       case 3:
-        return <StepSimple label="Patente" stepName={"patente"} typeInput={'text'} placeholder="ABC123" formData={formData} setFormData={setFormData} error={error} setError={setError} />
+        return (
+          <StepSimple
+            label="Patente"
+            stepName={"patente"}
+            typeInput={"text"}
+            placeholder="ABC123"
+            formData={formData}
+            setFormData={setFormData}
+            error={error}
+            setError={setError}
+          />
+        );
       case 4:
-        return <StepSimple label="Nombre y Apellido" stepName={"nombre"} typeInput={'text'} placeholder="Juan Perez" formData={formData} setFormData={setFormData} error={error} setError={setError} />
+        return (
+          <StepSimple
+            label="Nombre y Apellido"
+            stepName={"nombre"}
+            typeInput={"text"}
+            placeholder="Juan Perez"
+            formData={formData}
+            setFormData={setFormData}
+            error={error}
+            setError={setError}
+          />
+        );
       case 5:
-        return <StepSimple label="Email" stepName={"email"} typeInput={'email'} placeholder="juan@email.com" formData={formData} setFormData={setFormData} error={error} setError={setError} />
+        return (
+          <StepSimple
+            label="Email"
+            stepName={"email"}
+            typeInput={"email"}
+            placeholder="juan@email.com"
+            formData={formData}
+            setFormData={setFormData}
+            error={error}
+            setError={setError}
+          />
+        );
       case 6:
-        return <StepSimple label="Teléfono" stepName={"telefono"} typeInput={'tel'} placeholder="+54 11 1234-5678" formData={formData} setFormData={setFormData} error={error} setError={setError} />
+        return (
+          <StepSimple
+            label="Teléfono"
+            stepName={"telefono"}
+            typeInput={"tel"}
+            placeholder="+54 11 1234-5678"
+            formData={formData}
+            setFormData={setFormData}
+            error={error}
+            setError={setError}
+          />
+        );
       case 7:
-        return <Coverages formData={formData} setFormData={setFormData} error={error} yearVehicle={formData.año}/>;
+        return (
+          <Coverages
+            formData={formData}
+            setFormData={setFormData}
+            error={error}
+            yearVehicle={formData.año as number}
+          />
+        );
       default:
         return null;
     }
   };
 
   return (
-    <div className="bg-white p-8 rounded-lg shadow-xl shadow-gray-300 mb-8">
-      <ProgressBar animationData={animationData} progress={progress}  />
+    <div
+      className="bg-white p-8 rounded-lg shadow-xl shadow-gray-300 mb-8"
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+    >
+      <ProgressBar animationData={animationData} progress={progress} />
 
       <motion.div
         key={formData.step}

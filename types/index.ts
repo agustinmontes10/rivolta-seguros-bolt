@@ -3,7 +3,7 @@ export interface FormDataType {
     marca: string;
     modelo: string;
     version: string;
-    año: number;
+    año: number | null;
     patente: string;
     nombre: string;
     email: string;
