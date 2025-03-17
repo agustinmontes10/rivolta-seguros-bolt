@@ -21,9 +21,9 @@ const Navbar = () => {
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-4">
               <Link href="/" className="hover:text-[#3ec1d3] px-3 py-2">Inicio</Link>
-              <Link href="#about" className="hover:text-[#3ec1d3] px-3 py-2">Sobre Nosotros</Link>
-              <Link href="#insurers" className="hover:text-[#3ec1d3] px-3 py-2">Aseguradoras</Link>
-              <Link href="#contact" className="hover:text-[#3ec1d3] px-3 py-2">Contacto</Link>
+              <Link href="/#about" className="hover:text-[#3ec1d3] px-3 py-2">Sobre Nosotros</Link>
+              <Link href="/#insurers" className="hover:text-[#3ec1d3] px-3 py-2">Aseguradoras</Link>
+              <Link href="/#contact" className="hover:text-[#3ec1d3] px-3 py-2">Contacto</Link>
               <Link href="/cotizar" className="bg-[#3ec1d3] text-white px-4 py-2 rounded-md hover:bg-[#36adbf]">
                 Cotizar
               </Link>
