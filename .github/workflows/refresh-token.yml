@@ -9,4 +9,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Hacer petición a la API de Vercel
-        run: curl -X GET https://rivoltaseguros.vercel.app/api/refreshToken
+        run: curl -X GET https://rivolta-seguros.vercel.app//api/refreshToken
