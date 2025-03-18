@@ -20,11 +20,11 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const brandId = searchParams.get("brandId");
     const modelId = searchParams.get("modelId");
-
-    const accessToken = await refreshTokenIfNeeded();
-    if (!accessToken) {
-      return NextResponse.json({ error: "No se pudo actualizar el token" }, { status: 500 });
-    }
+    const accessToken = await getMeliToken();
+    // const accessToken = await refreshTokenIfNeeded();
+    // if (!accessToken) {
+    //   return NextResponse.json({ error: "No se pudo actualizar el token" }, { status: 500 });
+    // }
 
     let url = "https://api.mercadolibre.com/sites/MLA/search?category=MLA1744";
     if (brandId) url += `&brand=${brandId}`;
