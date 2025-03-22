@@ -21,6 +21,7 @@ export async function GET(req: Request) {
     const brandId = searchParams.get("brandId");
     const modelId = searchParams.get("modelId");
     const accessToken = await getMeliToken();
+    console.log('accessToken', accessToken)
     // const accessToken = await refreshTokenIfNeeded();
     // if (!accessToken) {
     //   return NextResponse.json({ error: "No se pudo actualizar el token" }, { status: 500 });
@@ -30,7 +31,7 @@ export async function GET(req: Request) {
     if (brandId) url += `&brand=${brandId}`;
     if (modelId) url += `&model=${modelId}`;
 
-    const response = await fetch(url, { headers: { Authorization: `Bearer ${accessToken}` } });
+    const response = await fetch(url, { headers: { Authorization: `Bearer ${accessToken.access_token}` } });
     const data = await response.json();
 
     return NextResponse.json(data, { status: 200 });
