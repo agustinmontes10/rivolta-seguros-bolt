@@ -4,8 +4,12 @@ import '@/styles/insurers.scss';
 const Insurers = () => {
   const insurers = [
     {
-      name: "Aseguradora A",
-      logo: "	https://branding.123seguro.com/logotypes/insurers/gray/seguros-experta.svg",
+      name: "Aseguradora B",
+      logo: "https://branding.123seguro.com/logotypes/insurers/gray/seguros-galeno.svg",
+    },
+    {
+      name: "Aseguradora B",
+      logo: "https://branding.123seguro.com/logotypes/insurers/gray/seguros-sancor.svg",
     },
     {
       name: "Aseguradora B",
@@ -19,6 +23,13 @@ const Insurers = () => {
       name: "Aseguradora D",
       logo: "https://branding.123seguro.com/logotypes/insurers/gray/seguros-mercantil.svg",
     },
+    {
+      name: "Aseguradora D",
+      logo: "https://branding.123seguro.com/logotypes/insurers/gray/seguros-zurich.svg",
+    },    {
+      name: "Aseguradora D",
+      logo: "https://branding.123seguro.com/logotypes/insurers/gray/seguros-mapfre.svg",
+    },
   ];
 
   return (
@@ -29,7 +40,7 @@ const Insurers = () => {
         </h2>
         <div className="insurers-banner">
           <div className="insurers-track">
-            {insurers.concat(insurers).map((insurer, index) => (
+            {insurers.map((insurer, index) => (
               <div
                 key={index}
                 className="insurer-card"
