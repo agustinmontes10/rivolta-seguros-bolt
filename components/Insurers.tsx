@@ -25,10 +25,14 @@ const Insurers = () => {
     },
     {
       name: "Aseguradora D",
-      logo: "https://branding.123seguro.com/logotypes/insurers/gray/seguros-zurich.svg",
+      logo: "/assets/logos/logoZurich.svg",
     },    {
       name: "Aseguradora D",
       logo: "https://branding.123seguro.com/logotypes/insurers/gray/seguros-mapfre.svg",
+    },
+    {
+      name: "Aseguradora D",
+      logo: "/assets/logos/logoIntegrity.svg",
     },
   ];
 
