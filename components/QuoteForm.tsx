@@ -62,13 +62,11 @@ export default function QuoteForm() {
           model: currentBrandId ? false : true,
           version: true,
         });
-        console.log(brands, "brandsData");
       })
       .catch((error) => console.error("Error:", error));
   };
 
   const getModels = (brandId: string) => {
-    console.log(brandId, "brandId");
     if (!brandId) return;
     setDisabled({ brand: true, model: true, version: true });
     fetch(`/api/vehicles?brandId=${brandId}`)
@@ -79,7 +77,6 @@ export default function QuoteForm() {
         ).values;
         setModels(models);
         setDisabled({ brand: false, model: false, version: true });
-        console.log(models, "modelsData");
       })
       .catch((error) => console.error("Error:", error));
   };
@@ -100,7 +97,6 @@ export default function QuoteForm() {
         }
         setVersions(versions);
         setDisabled({ brand: false, model: false, version: false });
-        console.log(data.available_filters, "versionsData");
       })
       .catch((error) => console.error("Error:", error));
   };
@@ -121,7 +117,7 @@ export default function QuoteForm() {
     ] as const;
     const currentValue = formData[formKeys[formData.step]] as string;
 
-    if(formData.step == 1) {
+    if (formData.step == 1) {
       const modeloValue = formData.modelo;
       const versionValue = formData.version;
       if (!modeloValue || !versionValue) {
@@ -129,10 +125,12 @@ export default function QuoteForm() {
         return false;
       }
     }
-    console.log('currentValue', currentValue);
-    console.log('step', formData.step)
     if (!currentValue) {
       setError("Este campo es requerido");
+      return false;
+    }
+    if(formData.step === 2 && formData.año?.toString().length != 4) {
+      setError("Año invalido");
       return false;
     }
     if (formData.step === 5 && !formData.email.includes("@")) {
@@ -244,92 +242,110 @@ export default function QuoteForm() {
               Marca del vehículo
             </label>
             {/* BRAND */}
-            <select
-              disabled={disabled.brand}
-              value={formData.marca}
-              onChange={(e) => {
-                setError("");
-                const selectedOption = e.target.selectedOptions[0];
-                const selectedBrandId = selectedOption.dataset.id;
-                setFormData({
-                  ...formData,
-                  marca: e.target.value,
-                  version: "",
-                });
-                setCurrentBrandId(selectedBrandId ?? "");
-                console.log(selectedBrandId, "brandId", brands);
-                getModels(selectedBrandId ?? "");
-                // setFormData({ ...formData, version: '' });
-              }}
-              className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
-                error ? "border-red-500" : ""
-              }`}
-            >
-              <option value="">Seleccionar Marca</option>
-              {brands.map((brand: any) => (
-                <option
-                  id={brand.id}
-                  key={brand.id}
-                  value={brand.name}
-                  data-id={brand.id}
-                >
-                  {brand.name}
-                </option>
-              ))}
-            </select>
+            {brands.length
+              ? <select
+                disabled={disabled.brand}
+                value={formData.marca}
+                onChange={(e) => {
+                  setError("");
+                  const selectedOption = e.target.selectedOptions[0];
+                  const selectedBrandId = selectedOption.dataset.id;
+                  setFormData({
+                    ...formData,
+                    marca: e.target.value,
+                    version: "",
+                    modelo: ""
+                  });
+                  setCurrentBrandId(selectedBrandId ?? "");
+                  setModels([]);
+                  getModels(selectedBrandId ?? "");
+                }}
+                className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${error ? "border-red-500" : ""
+                  }`}
+              >
+                <option value="">Seleccionar Marca</option>
+                {brands.map((brand: any) => (
+                  <option
+                    id={brand.id}
+                    key={brand.id}
+                    value={brand.name}
+                    data-id={brand.id}
+                  >
+                    {brand.name}
+                  </option>
+                ))}
+              </select>
+              : <div className="loader" />
+            }
+
             {/* MODEL */}
-            <select
-              disabled={disabled.model}
-              value={formData.modelo}
-              onChange={(e) => {
-                setError("");
-                const selectedOption = e.target.selectedOptions[0];
-                const selectedBrandId = selectedOption.dataset.id;
-                setFormData({ ...formData, modelo: e.target.value });
-                setCurrentModelId(selectedBrandId ?? "");
-                getVersions(currentBrandId, selectedBrandId ?? "");
-              }}
-              className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
-                error ? "border-red-500" : ""
-              }`}
-            >
-              <option value="">Seleccionar Modelo</option>
-              {models.map((model: any) => (
-                <option
-                  id={model.id}
-                  key={model.id}
-                  value={model.name}
-                  data-id={model.id}
+            {formData.marca == ''
+              ? ''
+              : (models.length
+                ? <select
+                  disabled={disabled.model}
+                  value={formData.modelo}
+                  onChange={(e) => {
+                    setError("");
+                    const selectedOption = e.target.selectedOptions[0];
+                    const selectedBrandId = selectedOption.dataset.id;
+                    setFormData({ ...formData, modelo: e.target.value, version: "" });
+                    setCurrentModelId(selectedBrandId ?? "");
+                    setVersions([]);
+                    getVersions(currentBrandId, selectedBrandId ?? "");
+                  }}
+                  className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${error ? "border-red-500" : ""
+                    }`}
                 >
-                  {model.name}
-                </option>
-              ))}
-            </select>
+                  <option value="">Seleccionar Modelo</option>
+                  {models.map((model: any) => (
+                    <option
+                      id={model.id}
+                      key={model.id}
+                      value={model.name}
+                      data-id={model.id}
+                    >
+                      {model.name}
+                    </option>
+                  ))}
+                </select>
+                : <div className="loader" />
+              )
+            }
+
             {/* VERSION */}
-            <select
-              disabled={disabled.version}
-              value={formData.version}
-              onChange={(e) => {
-                setError("");
-                setFormData({ ...formData, version: e.target.value });
-              }}
-              className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${
-                error ? "border-red-500" : ""
-              }`}
-            >
-              <option value="">Seleccionar Versión</option>
-              {versions.map((version: any) => (
-                <option key={version.id || version.name} value={version.name}>
-                {version.name}
-              </option>              
-              ))}
-            </select>
+            {formData.modelo == ''
+              ? ''
+              : (versions.length ?
+                <select
+                  disabled={disabled.version}
+                  value={formData.version}
+                  onChange={(e) => {
+                    setError("");
+                    setFormData({ ...formData, version: e.target.value });
+                  }}
+                  className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${error ? "border-red-500" : ""
+                    }`}
+                >
+                  <option value="">Seleccionar Versión</option>
+                  {versions.map((version: any) => (
+                    <option key={version.id || version.name} value={version.name}>
+                      {version.name}
+                    </option>
+                  ))}
+                </select>
+                : <div className="loader" />
+              )
+
+            }
+
             {formData.version === "otra" && (
               <input
                 className="w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent"
                 placeholder="Especificar versión"
               />
             )}
+            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
           </div>
         );
       case 2:

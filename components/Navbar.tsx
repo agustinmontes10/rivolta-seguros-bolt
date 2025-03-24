@@ -9,7 +9,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="bg-[#152549] text-white fixed w-full z-50">
+    <nav className={`bg-[#152549] text-white fixed w-full z-50 ${isOpen && 'shadow-[0px_10px_40px_0px_black]'} md:shadow-none`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-auto">
           <div className="flex-shrink-0">
