@@ -56,17 +56,43 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 10px; /* Ancho del scrollbar */
+  width: 10px;
+  /* Ancho del scrollbar */
 }
 
 ::-webkit-scrollbar-track {
-  background: #d1d5dc; /* Color del fondo del scrollbar */
+  background: #d1d5dc;
+  /* Color del fondo del scrollbar */
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #152549; /* Color del "pulgar" (parte que se arrastra) */
+  background: #152549;
+  /* Color del "pulgar" (parte que se arrastra) */
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #1a2d5a; /* Color cuando pasas el mouse sobre el scrollbar */
+  background: #1a2d5a;
+  /* Color cuando pasas el mouse sobre el scrollbar */
+}
+
+
+
+.loader {
+  border-radius: 50%;
+  border: 4px solid rgba(0, 0, 0, .1);
+  border-left-color: transparent;
+  width: 36px;
+  height: 36px;
+  animation: loading 1s linear infinite;
+}
+
+
+@keyframes loading {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
