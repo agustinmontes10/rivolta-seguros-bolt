@@ -29,26 +29,17 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">Contacto</h4>
             <ul className="space-y-2 text-gray-400">
-              <li>Email: poner email</li>
-              <li>Teléfono: poner numero</li>
-              <li>Dirección: poner direccion</li>
+              <li>Email: Segurosrivolta@gmail.com</li>
+              <li>Teléfono: 2983 350597</li>
+              <li>Dirección: Mitre 74, Adolfo González Chaves, CP 7513</li>
             </ul>
           </div>
           
           <div>
             <h4 className="text-lg font-semibold mb-4">Síguenos</h4>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-[#3ec1d3]">
-                <Facebook size={24} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-[#3ec1d3]">
-                <Twitter size={24} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-[#3ec1d3]">
+              <a href="https://www.instagram.com/rivoltaseguros/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#3ec1d3]">
                 <Instagram size={24} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-[#3ec1d3]">
-                <Linkedin size={24} />
               </a>
             </div>
           </div>
