@@ -9,7 +9,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <Link href="/" className="text-xl font-bold">
-              <Image src={'/assets/logo.png'} alt='logo' width={200} height={200} />
+              <Image className='mb-4' src={'/assets/logo1.png'} alt='logo' width={125} height={125} />
             </Link>
             <p className="text-gray-400">
               Tu seguridad es nuestra prioridad
