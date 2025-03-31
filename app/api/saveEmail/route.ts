@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Si no hay nombre y apellido, dejamos vacío en Google Sheets
-    const nombreCompleto = name?.trim() || "";
+    const nombreCompleto = name?.trim() || "Sin Nombre";
 
     const credentials = {
       type: process.env.GOOGLE_TYPE,
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
 
     const sheets = google.sheets({ version: "v4", auth });
 
-    const spreadsheetId = "1KU9kqFc3IW_dvUnOsXWTXfxWWNrsCZ4j12yPMct6mt8";
+    const spreadsheetId = "1GcY8Xz0rL-ACEQo8kXvmyso-Ta28-HncMYN3QZNzkyA";
     const range = "A:C"; // Guardamos en columnas A, B Y C
 
     // Insertar datos en la hoja en orden
