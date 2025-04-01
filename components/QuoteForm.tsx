@@ -21,6 +21,7 @@ export default function QuoteForm() {
     año: null,
     patente: "",
     nombre: "",
+    ciudad: "",
     email: "",
     telefono: "",
     tipoSeguro: "",
@@ -31,15 +32,14 @@ export default function QuoteForm() {
   const [animationData, setAnimationData] = useState(null);
   const [isClient, setIsClient] = useState<boolean>(false);
   const [brands, setBrands] = useState([]);
-  const [currentBrandId, setCurrentBrandId] = useState("");
   const [models, setModels] = useState([]);
-  const [currentModelId, setCurrentModelId] = useState("");
   const [versions, setVersions] = useState([]);
   const [disabled, setDisabled] = useState({
     brand: false,
     model: true,
     version: true,
   });
+  const [cities, setCities] = useState([]);
 
   const animData = () => {
     fetch("/assets/carAnimation.json")
@@ -48,58 +48,48 @@ export default function QuoteForm() {
       .catch((error) => console.error("Error loading animation:", error));
   };
 
-  const getBrands = () => {
+  const getBrands = async () => {
     setDisabled({ brand: true, model: true, version: true });
-    fetch("/api/vehicles")
-      .then((response) => response.json())
-      .then((data) => {
-        const brands = data.available_filters.find(
-          (filter: any) => filter.id === "BRAND"
-        ).values;
-        setBrands(brands);
-        setDisabled({
-          brand: false,
-          model: currentBrandId ? false : true,
-          version: true,
-        });
-      })
-      .catch((error) => console.error("Error:", error));
+    const res = await fetch('/api/brands');
+    const { data } = await res.json();
+    setBrands(data);
+    setDisabled({
+      brand: false,
+      model: true,
+      version: true,
+    });
   };
 
-  const getModels = (brandId: string) => {
-    if (!brandId) return;
+  const getModels = async (brand: string) => {
+    if (!brand) return;
     setDisabled({ brand: true, model: true, version: true });
-    fetch(`/api/vehicles?brandId=${brandId}`)
-      .then((response) => response.json())
-      .then((data) => {
-        const models = data.available_filters.find(
-          (filter: any) => filter.id === "MODEL"
-        ).values;
-        setModels(models);
-        setDisabled({ brand: false, model: false, version: true });
-      })
-      .catch((error) => console.error("Error:", error));
+
+    const res = await fetch(`/api/models?brand=${encodeURIComponent(brand)}`);
+    const { data } = await res.json();
+    setModels(data);
+    setDisabled({ brand: false, model: false, version: true });
   };
 
-  const getVersions = (brandId: string, modelId: string) => {
-    if (!brandId || !modelId) return;
+  const getVersions = async (model: string) => {
+    if (!model) return;
     setDisabled({ brand: true, model: true, version: true });
-    fetch(`/api/vehicles?brandId=${brandId}&modelId=${modelId}`)
-      .then((response) => response.json())
-      .then((data) => {
-        let versions = data.available_filters.find(
-          (filter: any) => filter.id === "SHORT_VERSION"
-        );
-        if (versions) {
-          versions = versions.values;
-        } else {
-          versions = [{ name: "otra" }];
-        }
-        setVersions(versions);
-        setDisabled({ brand: false, model: false, version: false });
-      })
-      .catch((error) => console.error("Error:", error));
+    const res = await fetch(
+      `/api/versions?brand=${encodeURIComponent(formData.marca)}&model=${encodeURIComponent(model)}`
+    );
+    const { data } = await res.json();
+    setVersions(data);
+    setDisabled({ brand: false, model: false, version: false });
   };
+
+  const getCities = async (value: string) => {
+    const url = `https://apis.datos.gob.ar/georef/api/localidades?nombre=${value}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    // setCities(data);
+    const cityNames = data.localidades?.map((localidad: { nombre: string }) => localidad.nombre);
+    setCities(cityNames);
+    console.log('ciudades', cityNames)
+  }
 
   const totalSteps = 7;
   const progress = (formData.step / totalSteps) * 100;
@@ -111,6 +101,7 @@ export default function QuoteForm() {
       "año",
       "patente",
       "nombre",
+      "ciudad",
       "email",
       "telefono",
       "tipoSeguro",
@@ -129,15 +120,16 @@ export default function QuoteForm() {
       setError("Este campo es requerido");
       return false;
     }
-    if(formData.step === 2 && formData.año?.toString().length != 4) {
+    const currentYear = new Date().getFullYear();
+    if (formData.step === 2 && (formData.año! < 1950 || formData.año! > currentYear)) {
       setError("Año invalido");
       return false;
     }
-    if (formData.step === 5 && !formData.email.includes("@")) {
+    if (formData.step === 6 && !formData.email.includes("@")) {
       setError("Por favor ingrese un email válido");
       return false;
     }
-    if (formData.step === 6 && formData.telefono.length < 8) {
+    if (formData.step === 7 && formData.telefono.length < 8) {
       setError("Por favor ingrese un número de teléfono válido");
       return false;
     }
@@ -225,14 +217,6 @@ export default function QuoteForm() {
     getBrands();
   }, []);
 
-  useEffect(() => {
-    getModels(currentBrandId);
-  }, [currentBrandId]);
-
-  useEffect(() => {
-    getVersions(currentBrandId, currentModelId);
-  }, [currentBrandId, currentModelId]);
-
   const renderStep = () => {
     switch (formData.step) {
       case 1:
@@ -248,30 +232,27 @@ export default function QuoteForm() {
                 value={formData.marca}
                 onChange={(e) => {
                   setError("");
-                  const selectedOption = e.target.selectedOptions[0];
-                  const selectedBrandId = selectedOption.dataset.id;
                   setFormData({
                     ...formData,
                     marca: e.target.value,
                     version: "",
                     modelo: ""
                   });
-                  setCurrentBrandId(selectedBrandId ?? "");
                   setModels([]);
-                  getModels(selectedBrandId ?? "");
+                  getModels(e.target.value);
                 }}
                 className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${error ? "border-red-500" : ""
                   }`}
               >
                 <option value="">Seleccionar Marca</option>
-                {brands.map((brand: any) => (
+                {brands.map((brand: string) => (
                   <option
-                    id={brand.id}
-                    key={brand.id}
-                    value={brand.name}
-                    data-id={brand.id}
+                    id={brand}
+                    key={brand}
+                    value={brand}
+                    data-id={brand}
                   >
-                    {brand.name}
+                    {brand}
                   </option>
                 ))}
               </select>
@@ -287,25 +268,22 @@ export default function QuoteForm() {
                   value={formData.modelo}
                   onChange={(e) => {
                     setError("");
-                    const selectedOption = e.target.selectedOptions[0];
-                    const selectedBrandId = selectedOption.dataset.id;
                     setFormData({ ...formData, modelo: e.target.value, version: "" });
-                    setCurrentModelId(selectedBrandId ?? "");
                     setVersions([]);
-                    getVersions(currentBrandId, selectedBrandId ?? "");
+                    getVersions(e.target.value);
                   }}
                   className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${error ? "border-red-500" : ""
                     }`}
                 >
                   <option value="">Seleccionar Modelo</option>
-                  {models.map((model: any) => (
+                  {models.map((model: string) => (
                     <option
-                      id={model.id}
-                      key={model.id}
-                      value={model.name}
-                      data-id={model.id}
+                      id={model}
+                      key={model}
+                      value={model}
+                      data-id={model}
                     >
-                      {model.name}
+                      {model}
                     </option>
                   ))}
                 </select>
@@ -328,9 +306,9 @@ export default function QuoteForm() {
                     }`}
                 >
                   <option value="">Seleccionar Versión</option>
-                  {versions.map((version: any) => (
-                    <option key={version.id || version.name} value={version.name}>
-                      {version.name}
+                  {versions.map((version: string) => (
+                    <option key={version} value={version}>
+                      {version}
                     </option>
                   ))}
                 </select>
@@ -389,6 +367,34 @@ export default function QuoteForm() {
         );
       case 5:
         return (
+          <div className="space-y-4 flex flex-col justify-center items-center">
+            <label className="block text-lg font-medium text-[#152549]">
+              Ciudad
+            </label>
+            <input 
+              type="text"
+              list="cities-list"
+              onChange={(e) => {
+                getCities(e.target.value);
+              }}
+              placeholder="Ej: Buenos Aires"
+              className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${error ? "border-red-500" : ""}`}
+              onInput={(e) => {
+                const selectedCity = (e.target as HTMLInputElement).value;
+                setFormData({ ...formData, ciudad: selectedCity });
+              }}
+            />
+            <datalist className="bg-blue-300" id="cities-list">
+              {cities?.map((city, index) => (
+                <option key={index} value={city} />
+              ))}
+            </datalist>
+            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+          </div>
+        );
+
+      case 6:
+        return (
           <StepSimple
             label="Email"
             stepName={"email"}
@@ -400,7 +406,7 @@ export default function QuoteForm() {
             setError={setError}
           />
         );
-      case 6:
+      case 7:
         return (
           <StepSimple
             label="Teléfono"
@@ -413,7 +419,7 @@ export default function QuoteForm() {
             setError={setError}
           />
         );
-      case 7:
+      case 8:
         return (
           <Coverages
             formData={formData}

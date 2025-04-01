@@ -24,8 +24,7 @@ const StepSimple: React.FC<StepSimpleProps> = ({ formData, setFormData, error, s
                     setError("");
                     setFormData({ ...formData, [stepName]: e.target.value });
                 }}
-                className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${error ? "border-red-500" : ""
-                    }`}
+                className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${error ? "border-red-500" : ""}`}
                 placeholder={`Ej: ${placeholder}`}
             />
             {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
