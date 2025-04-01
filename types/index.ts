@@ -6,6 +6,7 @@ export interface FormDataType {
     año: number | null;
     patente: string;
     nombre: string;
+    ciudad: string;
     email: string;
     telefono: string;
     tipoSeguro: string;
