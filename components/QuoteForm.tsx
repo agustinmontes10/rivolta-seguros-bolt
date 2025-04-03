@@ -152,22 +152,35 @@ export default function QuoteForm() {
 
   const handleSubmit = async () => {
     if (validateCurrentStep()) {
-      const message = `
-        Nueva Cotización
-        Marca: ${formData.marca}
-        Modelo: ${formData.modelo}
-        Versión: ${formData.version}
-        Año: ${formData.año}
-        Patente: ${formData.patente}
-        Nombre: ${formData.nombre}
-        Email: ${formData.email}
-        Teléfono: ${formData.telefono}
-        Tipo de Seguro: ${formData.tipoSeguro}
-      `;
+      // Formato del mensaje más limpio y estructurado
+      const message = `Nueva Cotización
+Marca: ${formData.marca}
+Modelo: ${formData.modelo}
+Versión: ${formData.version}
+Año: ${formData.año}
+Patente: ${formData.patente}
+Nombre: ${formData.nombre}
+Email: ${formData.email}
+Teléfono: ${formData.telefono}
+Tipo de Seguro: ${formData.tipoSeguro}`;
 
-      const whatsappUrl = `https://wa.me/2983341123?text=${encodeURIComponent(
-        message
-      )}`;
+      // Número de teléfono sin el signo + para mayor compatibilidad
+      const phoneNumber = "5492983350597";
+
+      // Detectar si es dispositivo móvil
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+      let whatsappUrl;
+
+      if (isMobile) {
+        // En dispositivos móviles, intentar abrir directamente la app de WhatsApp
+        whatsappUrl = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+      } else {
+        // En escritorio, usar WhatsApp Web que funciona de manera más confiable con mensajes prearmados
+        whatsappUrl = `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}&app_absent=0`;
+      }
+
+      // Abrimos en una nueva pestaña si estamos en el cliente
       if (isClient) {
         window.open(whatsappUrl, "_blank");
       }
@@ -371,7 +384,7 @@ export default function QuoteForm() {
             <label className="block text-lg font-medium text-[#152549]">
               Ciudad
             </label>
-            <input 
+            <input
               type="text"
               list="cities-list"
               onChange={(e) => {
