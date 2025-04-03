@@ -91,7 +91,7 @@ export default function QuoteForm() {
     console.log('ciudades', cityNames)
   }
 
-  const totalSteps = 7;
+  const totalSteps = 8;
   const progress = (formData.step / totalSteps) * 100;
 
   const validateCurrentStep = () => {
@@ -154,15 +154,15 @@ export default function QuoteForm() {
     if (validateCurrentStep()) {
       // Formato del mensaje más limpio y estructurado
       const message = `Nueva Cotización
-Marca: ${formData.marca}
-Modelo: ${formData.modelo}
-Versión: ${formData.version}
-Año: ${formData.año}
-Patente: ${formData.patente}
-Nombre: ${formData.nombre}
-Email: ${formData.email}
-Teléfono: ${formData.telefono}
-Tipo de Seguro: ${formData.tipoSeguro}`;
+        Marca: ${formData.marca}
+        Modelo: ${formData.modelo}
+        Versión: ${formData.version}
+        Año: ${formData.año}
+        Patente: ${formData.patente}
+        Nombre: ${formData.nombre}
+        Email: ${formData.email}
+        Teléfono: ${formData.telefono}
+        Tipo de Seguro: ${formData.tipoSeguro}`;
 
       // Número de teléfono sin el signo + para mayor compatibilidad
       const phoneNumber = "5492983350597";
@@ -271,6 +271,7 @@ Tipo de Seguro: ${formData.tipoSeguro}`;
               </select>
               : <div className="loader" />
             }
+           
 
             {/* MODEL */}
             {formData.marca == ''
@@ -299,10 +300,17 @@ Tipo de Seguro: ${formData.tipoSeguro}`;
                       {model}
                     </option>
                   ))}
+                  <option value="otra">Otra</option>
                 </select>
                 : <div className="loader" />
               )
             }
+             {formData.modelo === "otra" && (
+              <input
+                className="w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent"
+                placeholder="Especificar modelo"
+              />
+            )}
 
             {/* VERSION */}
             {formData.modelo == ''
@@ -324,6 +332,7 @@ Tipo de Seguro: ${formData.tipoSeguro}`;
                       {version}
                     </option>
                   ))}
+                  <option value="otra">Otra</option>
                 </select>
                 : <div className="loader" />
               )

@@ -38,6 +38,10 @@ const Insurers = () => {
       name: "Integrity Seguros",
       logo: "/assets/logos/logoIntegrity.svg",
     },
+    {
+      name: "Rivadavia Seguros",
+      logo: "/assets/logos/logoRivadavia.svg",
+    },
   ];
 
   // Referencia para ajustar la animación basada en el número de elementos
