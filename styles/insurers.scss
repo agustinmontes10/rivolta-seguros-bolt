@@ -1,30 +1,108 @@
 .insurers-banner {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow-x: auto; // Si quieres que sea un banner desplazable
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+
+  // Efecto de desvanecimiento en los extremos
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 100px;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
   }
-  
-  .insurers-track {
-    display: flex;
-    gap: 20px; // Añade un espacio entre las tarjetas si lo necesitas
-    flex-wrap: wrap;
-    justify-content: center;
+
+  &::before {
+    left: 0;
+    background: linear-gradient(to right, rgba(243, 244, 246, 1), rgba(243, 244, 246, 0));
   }
-  
-  .insurer-card {
-    flex-shrink: 0;
-    width: 150px; // Ajusta el tamaño según lo que necesites
-    height: 100px; // Ajusta también la altura
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
+
+  &::after {
+    right: 0;
+    background: linear-gradient(to left, rgba(243, 244, 246, 1), rgba(243, 244, 246, 0));
   }
-  
-  .insurer-card img {
+}
+
+.insurers-track {
+  display: flex;
+  gap: 40px;
+  padding: 20px 0;
+  animation: scroll 30s linear infinite;
+
+  // Duplicamos los elementos para crear un efecto continuo
+  &:hover {
+    animation-play-state: paused; // Pausa la animación al pasar el mouse
+  }
+}
+
+.insurer-card {
+  flex-shrink: 0;
+  width: 150px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  img {
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain; // Para mantener la proporción de la imagen
+    object-fit: contain;
+    filter: grayscale(70%);
+    opacity: 0.85;
+    transition: filter 0.3s ease, opacity 0.3s ease;
+
+    &:hover {
+      // Versión en negro al hacer hover
+      filter: brightness(0) invert(0);
+      opacity: 1;
+    }
   }
-  
+}
+
+// Animación para el desplazamiento continuo
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(calc(-1 * var(--track-width, 1520px))); // Usa la variable CSS o un valor por defecto
+  }
+}
+
+// Ajustes para dispositivos móviles
+@media (max-width: 768px) {
+
+  .insurers-banner::before,
+  .insurers-banner::after {
+    width: 50px;
+  }
+
+  .insurers-track {
+    gap: 20px;
+  }
+
+  .insurer-card {
+    width: 120px;
+    height: 80px;
+  }
+
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+      transform: translateX(calc(-1 * var(--track-width, 1120px))); // Usa la variable CSS o un valor por defecto para móviles
+    }
+  }
+}
