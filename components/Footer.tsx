@@ -46,7 +46,10 @@ const Footer = () => {
         </div>
         
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; 2025 nuestroname. Todos los derechos reservados.</p>
+          <p className='flex gap-2 justify-center'>
+            &copy; 2025 Hecho por Rocketly
+            <Image className='mb-4' src={'/assets/iconRocket.png'} alt='logo' width={25} height={25} />
+          </p>
         </div>
       </div>
     </footer>
