@@ -300,17 +300,10 @@ export default function QuoteForm() {
                       {model}
                     </option>
                   ))}
-                  <option value="otra">Otra</option>
                 </select>
                 : <div className="loader" />
               )
             }
-             {formData.modelo === "otra" && (
-              <input
-                className="w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent"
-                placeholder="Especificar modelo"
-              />
-            )}
 
             {/* VERSION */}
             {formData.modelo == ''
