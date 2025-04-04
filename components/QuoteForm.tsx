@@ -8,6 +8,7 @@ import Coverages from "@/app/cotizar/components/StepCoverages";
 import { FormDataType } from "@/types";
 import StepSimple from "@/app/cotizar/components/StepSimple";
 import ProgressBar from "@/app/cotizar/components/ProgressBar";
+import { version } from "node:os";
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 const ACCESS_TOKEN = process.env.NEXT_PUBLIC_MELI_ACCESS_TOKEN;
@@ -40,7 +41,10 @@ export default function QuoteForm() {
     version: true,
   });
   const [cities, setCities] = useState([]);
-
+  const [brandInput, setBrandInput] = useState(false);
+  const [modelInput, setModelInput] = useState(false);
+  const [versionInput, setVersionInput] = useState(false);
+  
   const animData = () => {
     fetch("/assets/carAnimation.json")
       .then((response) => response.json())
@@ -66,7 +70,7 @@ export default function QuoteForm() {
 
     const res = await fetch(`/api/models?brand=${encodeURIComponent(brand)}`);
     const { data } = await res.json();
-    setModels(data);
+    if(data && data.length === 0) setModels([]); else setModels(data);
     setDisabled({ brand: false, model: false, version: true });
   };
 
@@ -77,7 +81,7 @@ export default function QuoteForm() {
       `/api/versions?brand=${encodeURIComponent(formData.marca)}&model=${encodeURIComponent(model)}`
     );
     const { data } = await res.json();
-    setVersions(data);
+    if(data && data.length === 0) setVersions([]); else setVersions(data);
     setDisabled({ brand: false, model: false, version: false });
   };
 
@@ -141,6 +145,7 @@ export default function QuoteForm() {
     if (validateCurrentStep() && formData.step < totalSteps) {
       setFormData((prev) => ({ ...prev, step: prev.step + 1 }));
     }
+    console.log('formData', formData)
   };
 
   const handlePrevious = () => {
@@ -238,24 +243,39 @@ export default function QuoteForm() {
             <label className="block text-lg font-medium text-[#152549]">
               Marca del vehículo
             </label>
-            {/* BRAND */}
-            {brands.length
+
+            {brandInput ?
+              <input
+                className="w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent"
+                placeholder="Especificar marca"
+                onChange={(e) => {
+                  setFormData({ ...formData, marca: e.target.value });
+                }}
+              />
+              :
+              brands.length
               ? <select
                 disabled={disabled.brand}
                 value={formData.marca}
                 onChange={(e) => {
-                  setError("");
-                  setFormData({
-                    ...formData,
-                    marca: e.target.value,
-                    version: "",
-                    modelo: ""
-                  });
-                  setModels([]);
-                  getModels(e.target.value);
+                  if (e.target.value === 'otra') {
+                    setBrandInput(true)
+                    setModelInput(true);
+                    setVersionInput(true);
+                  }
+                  else {
+                    setError("");
+                    setFormData({
+                      ...formData,
+                      marca: e.target.value,
+                      version: "",
+                      modelo: ""
+                    });
+                    setModels([]);
+                    getModels(e.target.value);
+                  }
                 }}
-                className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${error ? "border-red-500" : ""
-                  }`}
+                className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${error ? "border-red-500" : ""}`}
               >
                 <option value="">Seleccionar Marca</option>
                 {brands.map((brand: string) => (
@@ -268,23 +288,37 @@ export default function QuoteForm() {
                     {brand}
                   </option>
                 ))}
+                <option value="otra">Otra</option>
               </select>
               : <div className="loader" />
             }
-           
-
-            {/* MODEL */}
-            {formData.marca == ''
+            
+            {modelInput ? 
+              <input
+                className="w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent"
+                placeholder="Especificar modelo"
+                onChange={(e) => {
+                  setFormData({ ...formData, modelo: e.target.value });
+                }}
+              />
+            :
+              formData.marca == '' 
               ? ''
-              : (models.length
+              : (models && models.length
                 ? <select
                   disabled={disabled.model}
                   value={formData.modelo}
                   onChange={(e) => {
-                    setError("");
-                    setFormData({ ...formData, modelo: e.target.value, version: "" });
-                    setVersions([]);
-                    getVersions(e.target.value);
+                    if (e.target.value === 'otra') {
+                      setModelInput(true)
+                      setVersionInput(true)
+                    }
+                    else {
+                      setError("");
+                      setFormData({ ...formData, modelo: e.target.value, version: "" });
+                      setVersions([]);
+                      getVersions(e.target.value);
+                    }
                   }}
                   className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${error ? "border-red-500" : ""
                     }`}
@@ -300,44 +334,48 @@ export default function QuoteForm() {
                       {model}
                     </option>
                   ))}
+                  <option value="otra">Otra</option>
                 </select>
                 : <div className="loader" />
               )
             }
 
             {/* VERSION */}
-            {formData.modelo == ''
-              ? ''
-              : (versions.length ?
-                <select
-                  disabled={disabled.version}
-                  value={formData.version}
+            {versionInput
+              ? <input
+                  className="w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent"
+                  placeholder="Especificar versión"
                   onChange={(e) => {
-                    setError("");
                     setFormData({ ...formData, version: e.target.value });
                   }}
-                  className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${error ? "border-red-500" : ""
-                    }`}
-                >
-                  <option value="">Seleccionar Versión</option>
-                  {versions.map((version: string) => (
-                    <option key={version} value={version}>
-                      {version}
-                    </option>
-                  ))}
-                  <option value="otra">Otra</option>
-                </select>
-                : <div className="loader" />
-              )
+                />
+              : formData.modelo == ''
+                ? ''
+                : (versions && versions.length ?
+                  <select
+                    disabled={disabled.version}
+                    value={formData.version}
+                    onChange={(e) => {
+                      (e.target.value === 'otra')
+                      ? setVersionInput(true)
+                      : setError("");
+                        setFormData({ ...formData, version: e.target.value });
+                    }}
+                    className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${error ? "border-red-500" : ""
+                      }`}
+                  >
+                    <option value="">Seleccionar Versión</option>
+                    {versions.map((version: string) => (
+                      <option key={version} value={version}>
+                        {version}
+                      </option>
+                    ))}
+                    <option value="otra">Otra</option>
+                  </select>
+                  : <div className="loader" />
+                )
 
             }
-
-            {formData.version === "otra" && (
-              <input
-                className="w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent"
-                placeholder="Especificar versión"
-              />
-            )}
             {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
           </div>
         );
