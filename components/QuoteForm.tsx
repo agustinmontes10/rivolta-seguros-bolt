@@ -169,26 +169,7 @@ export default function QuoteForm() {
         Teléfono: ${formData.telefono}
         Tipo de Seguro: ${formData.tipoSeguro}`;
 
-      // Número de teléfono sin el signo + para mayor compatibilidad
-      const phoneNumber = "5492983350597";
-
-      // Detectar si es dispositivo móvil
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-      let whatsappUrl;
-
-      if (isMobile) {
-        // En dispositivos móviles, intentar abrir directamente la app de WhatsApp
-        whatsappUrl = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
-      } else {
-        // En escritorio, usar WhatsApp Web que funciona de manera más confiable con mensajes prearmados
-        whatsappUrl = `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}&app_absent=0`;
-      }
-
-      // Abrimos en una nueva pestaña si estamos en el cliente
-      if (isClient) {
-        window.open(whatsappUrl, "_blank");
-      }
+        handleWhatsAppClick(message);
 
       // Si el usuario tildó el checkbox, enviamos los datos a Google Sheets
       if (formData.subscribeNewsletter) {
@@ -234,6 +215,12 @@ export default function QuoteForm() {
     animData();
     getBrands();
   }, []);
+
+  const handleWhatsAppClick = (message: string) => {
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/${5492983350597}?text=${encodedMessage}`;
+    window.open(whatsappUrl, "_blank");
+  };
 
   const renderStep = () => {
     switch (formData.step) {
