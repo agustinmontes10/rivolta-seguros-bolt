@@ -27,28 +27,11 @@ const Products = () => {
     fetchOfertas();
     animData();
   }, []);
-
-  const sendMessage = (titulo: string, descripcion: string) => {
-    // Formato del mensaje más limpio y directo
-    const message = `¡Hola! Estoy interesado en la oferta de ${titulo} que vi en su página web. Descripcion: ${descripcion}`;
-
-    // Número de teléfono sin el signo + para mayor compatibilidad
-    const phoneNumber = "5492983350597";
-
-    // Detectar si es dispositivo móvil
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-    let whatsappUrl;
-
-    if (isMobile) {
-      // En dispositivos móviles, intentar abrir directamente la app de WhatsApp
-      whatsappUrl = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
-    } else {
-      // En escritorio, usar WhatsApp Web que funciona de manera más confiable con mensajes prearmados
-      whatsappUrl = `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}&app_absent=0`;
-    }
-
-    // Abrimos en una nueva pestaña
+  
+  const handleWhatsAppClick = (title: string, descripcion: string) => {
+    const message = `¡Hola! Estoy interesado en la oferta de ${title} que vi en su página web. Descripcion: ${descripcion}`;
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/${5492983350597}?text=${encodedMessage}`;
     window.open(whatsappUrl, "_blank");
   };
 
@@ -75,9 +58,9 @@ const Products = () => {
                   <h3 className="text-lg font-bold text-gray-800 mb-2">{oferta.titulo}</h3>
                   <p className="text-gray-600 text-sm mb-2">{oferta.descripcion}</p>
                 </div>
-                <button className="flex items-center gap-3 text-gray-200 font-medium py-2 px-4 rounded mt-2 bg-[#152549]" onClick={() => sendMessage(oferta.titulo, oferta.descripcion)}>
+                <button className="flex items-center gap-3 text-gray-200 font-medium py-2 px-4 rounded mt-2 bg-[#152549]" onClick={() => handleWhatsAppClick(oferta.titulo, oferta.descripcion)}>
                   Mas información
-                  <img src="/assets/icon-whatsapp.png" alt="" className="w-[30px]" />
+                  <img src="/assets/icon-whatsapp.png" alt="" className="w-[20px]" />
                 </button>
               </div>
             </div>
