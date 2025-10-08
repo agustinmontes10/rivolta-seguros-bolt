@@ -88,3 +88,24 @@ body {
     transform: rotate(360deg);
   }
 }
+
+.whatsappFloatBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background-color: #25d366;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+
+  svg {
+    width: 32px;
+    height: 32px;
+  }
+}
