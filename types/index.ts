@@ -5,8 +5,9 @@ export interface FormDataType {
     version: string;
     año: number | null;
     patente: string;
+    gas: boolean;
     nombre: string;
-    ciudad: string;
+    codigoPostal: string;
     email: string;
     telefono: string;
     tipoSeguro: string;
