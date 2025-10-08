@@ -39,7 +39,7 @@ const Pagination: React.FC<PaginationProps> = ({ productsPerPage, totalProducts,
         <li>
           <button
             onClick={() => paginate(currentPage + 1)}
-            disabled={currentPage === pageNumbers.length}
+            disabled={currentPage === pageNumbers?.length}
             className={`py-2 px-3 leading-tight rounded ${currentPage === pageNumbers.length ? 'bg-gray-300 hover:bg-gray-300 hover:text-gray-500 text-gray-500 cursor-not-allowed' : 'bg-white text-[#152549]'} border border-gray-300 hover:bg-[#1a2d5a] hover:text-white transition-colors`}
           >
             Siguiente

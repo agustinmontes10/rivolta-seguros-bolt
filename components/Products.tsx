@@ -38,7 +38,7 @@ const Products = () => {
   // Obtener los productos actuales
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = ofertas.slice(indexOfFirstProduct, indexOfLastProduct);
+  const currentProducts = ofertas?.slice(indexOfFirstProduct, indexOfLastProduct);
 
   // Cambiar de página
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
@@ -50,7 +50,7 @@ const Products = () => {
           Nuestras Ofertas
         </h2>
         <div className="flex flex-col md:flex-row items-center gap-10 pt-4 pb-8 justify-center">
-          {currentProducts.length ? currentProducts.map((oferta: any) => (
+          {currentProducts?.length ? currentProducts?.map((oferta: any) => (
             <div key={oferta.id} className="flex-none w-4/5 md:w-64 bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform hover:scale-105">
               <div className="h-60 bg-no-repeat bg-center" style={{ backgroundImage: `url(${oferta.imagen})`, backgroundSize: '100% 100%' }}></div>
               <div className="p-4 flex flex-col justify-between h-40">
@@ -76,7 +76,7 @@ const Products = () => {
         </div>
         <Pagination
           productsPerPage={productsPerPage}
-          totalProducts={ofertas.length}
+          totalProducts={ofertas?.length}
           paginate={paginate}
           currentPage={currentPage}
         />

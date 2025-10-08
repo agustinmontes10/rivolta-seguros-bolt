@@ -21,8 +21,9 @@ export default function QuoteForm() {
     version: "",
     año: null,
     patente: "",
+    gas: false,
     nombre: "",
-    ciudad: "",
+    codigoPostal: "",
     email: "",
     telefono: "",
     tipoSeguro: "",
@@ -40,7 +41,6 @@ export default function QuoteForm() {
     model: true,
     version: true,
   });
-  const [cities, setCities] = useState([]);
   const [brandInput, setBrandInput] = useState(false);
   const [modelInput, setModelInput] = useState(false);
   const [versionInput, setVersionInput] = useState(false);
@@ -85,17 +85,9 @@ export default function QuoteForm() {
     setDisabled({ brand: false, model: false, version: false });
   };
 
-  const getCities = async (value: string) => {
-    const url = `https://apis.datos.gob.ar/georef/api/localidades?nombre=${value}`;
-    const res = await fetch(url);
-    const data = await res.json();
-    // setCities(data);
-    const cityNames = data.localidades?.map((localidad: { nombre: string }) => localidad.nombre);
-    setCities(cityNames);
-    console.log('ciudades', cityNames)
-  }
 
-  const totalSteps = 8;
+
+  const totalSteps = 9;
   const progress = (formData.step / totalSteps) * 100;
 
   const validateCurrentStep = () => {
@@ -104,8 +96,9 @@ export default function QuoteForm() {
       "marca",
       "año",
       "patente",
+      "gas",
       "nombre",
-      "ciudad",
+      "codigoPostal",
       "email",
       "telefono",
       "tipoSeguro",
@@ -120,7 +113,8 @@ export default function QuoteForm() {
         return false;
       }
     }
-    if (!currentValue) {
+    // Skip validation for gas step (step 4) since it's a boolean
+    if (formData.step !== 4 && !currentValue) {
       setError("Este campo es requerido");
       return false;
     }
@@ -129,11 +123,27 @@ export default function QuoteForm() {
       setError("Año invalido");
       return false;
     }
-    if (formData.step === 6 && !formData.email.includes("@")) {
+    if (formData.step === 6) {
+      // Validación para código postal argentino
+      // Formatos válidos: 1000, B7000, C1000ABC
+      const postalCodeRegex = /^(\d{4}|[A-Z]\d{4}|[A-Z]\d{4}[A-Z]{3})$/;
+      const codigoPostal = formData.codigoPostal.toUpperCase().trim();
+      
+      if (!postalCodeRegex.test(codigoPostal)) {
+        setError("Por favor ingrese un código postal válido (ej: 1000, B7000 o C1000ABC)");
+        return false;
+      }
+      
+      // Actualizar el valor formateado
+      if (codigoPostal !== formData.codigoPostal) {
+        setFormData({ ...formData, codigoPostal: codigoPostal });
+      }
+    }
+    if (formData.step === 7 && !formData.email.includes("@")) {
       setError("Por favor ingrese un email válido");
       return false;
     }
-    if (formData.step === 7 && formData.telefono.length < 8) {
+    if (formData.step === 8 && formData.telefono.length < 8) {
       setError("Por favor ingrese un número de teléfono válido");
       return false;
     }
@@ -164,7 +174,9 @@ export default function QuoteForm() {
         Versión: ${formData.version}
         Año: ${formData.año}
         Patente: ${formData.patente}
+        Gas: ${formData.gas ? 'Sí' : 'No'}
         Nombre: ${formData.nombre}
+        Código Postal: ${formData.codigoPostal}
         Email: ${formData.email}
         Teléfono: ${formData.telefono}
         Tipo de Seguro: ${formData.tipoSeguro}`;
@@ -240,7 +252,7 @@ export default function QuoteForm() {
                 }}
               />
               :
-              brands.length
+              brands?.length
               ? <select
                 disabled={disabled.brand}
                 value={formData.marca}
@@ -394,6 +406,42 @@ export default function QuoteForm() {
         );
       case 4:
         return (
+          <div className="space-y-4 flex flex-col justify-center items-center">
+            <label className="block text-lg font-medium text-[#152549]">
+              ¿El vehículo tiene gas?
+            </label>
+            <div className="flex space-x-6">
+              <label className="flex items-center cursor-pointer">
+                <input
+                  type="radio"
+                  name="gas"
+                  checked={!formData.gas}
+                  onChange={() => {
+                    setError("");
+                    setFormData({ ...formData, gas: false });
+                  }}
+                  className="mr-2 h-4 w-4 text-[#3ec1d3] focus:ring-[#3ec1d3] border-[#152549]"
+                />
+                <span className="text-[#152549] font-medium">No</span>
+              </label>
+              <label className="flex items-center cursor-pointer">
+                <input
+                  type="radio"
+                  name="gas"
+                  checked={formData.gas}
+                  onChange={() => {
+                    setError("");
+                    setFormData({ ...formData, gas: true });
+                  }}
+                  className="mr-2 h-4 w-4 text-[#3ec1d3] focus:ring-[#3ec1d3] border-[#152549]"
+                />
+                <span className="text-[#152549] font-medium">Sí</span>
+              </label>
+            </div>
+          </div>
+        );
+      case 5:
+        return (
           <StepSimple
             label="Nombre y Apellido"
             stepName={"nombre"}
@@ -405,35 +453,21 @@ export default function QuoteForm() {
             setError={setError}
           />
         );
-      case 5:
+      case 6:
         return (
-          <div className="space-y-4 flex flex-col justify-center items-center">
-            <label className="block text-lg font-medium text-[#152549]">
-              Ciudad
-            </label>
-            <input
-              type="text"
-              list="cities-list"
-              onChange={(e) => {
-                getCities(e.target.value);
-              }}
-              placeholder="Ej: Buenos Aires"
-              className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${error ? "border-red-500" : ""}`}
-              onInput={(e) => {
-                const selectedCity = (e.target as HTMLInputElement).value;
-                setFormData({ ...formData, ciudad: selectedCity });
-              }}
-            />
-            <datalist className="bg-blue-300" id="cities-list">
-              {cities?.map((city, index) => (
-                <option key={index} value={city} />
-              ))}
-            </datalist>
-            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-          </div>
+          <StepSimple
+            label="Código Postal"
+            stepName={"codigoPostal"}
+            typeInput={"text"}
+            placeholder="1000, B7000 o C1000ABC"
+            formData={formData}
+            setFormData={setFormData}
+            error={error}
+            setError={setError}
+          />
         );
 
-      case 6:
+      case 7:
         return (
           <StepSimple
             label="Email"
@@ -446,7 +480,7 @@ export default function QuoteForm() {
             setError={setError}
           />
         );
-      case 7:
+      case 8:
         return (
           <StepSimple
             label="Teléfono"
@@ -459,7 +493,7 @@ export default function QuoteForm() {
             setError={setError}
           />
         );
-      case 8:
+      case 9:
         return (
           <Coverages
             formData={formData}
@@ -475,7 +509,7 @@ export default function QuoteForm() {
 
   return (
     <div
-      className="bg-white p-8 rounded-lg shadow-xl shadow-gray-300 mb-8"
+      className="bg-white p-8 rounded-lg shadow-xl shadow-gray-300 mb-8 "
       onKeyDown={handleKeyDown}
       tabIndex={0}
     >
