@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Check } from "lucide-react";
+import { labelClass, optionClass } from "./styles";
 
 const coverturasJSON = {
     "aseguradoras": [
@@ -51,35 +53,42 @@ const StepCoverages: React.FC<StepCoveragesProps> = ({ yearVehicle, formData, se
     }
 
     return (
-        <div className="space-y-4 flex flex-col justify-center items-center">
-            <label className="block text-lg font-medium text-[#152549]">
+        <div className="flex flex-col gap-6">
+            <label className={labelClass}>
                 Coberturas disponibles
             </label>
-            <div className="w-full overflow-x-auto pb-4">
-                <div className="flex space-x-4">
-                    {getCoverages().map((aseguradora, index) => (
-                        aseguradora.coberturas.map((cobertura, idx) => (
-                            <div
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {getCoverages().map((aseguradora, index) => (
+                    aseguradora.coberturas.map((cobertura, idx) => {
+                        const selected = isSelected === `${index}-${idx}`;
+                        return (
+                            <button
+                                type="button"
                                 key={`${index}-${idx}`}
-                                className={`min-w-[200px] p-4 cursor-pointer border rounded-md shadow-md  transition-colors
-                                        ${isSelected === `${index}-${idx}` ? 'bg-[#152549] text-gray-600 border-gray-600' : 'bg-white border-[#152549]'}`}
+                                className={`${optionClass(selected)} flex min-h-[120px] flex-col justify-between`}
                                 onClick={() => {
                                     setFormData({ ...formData, tipoSeguro: `${aseguradora.nombre} - ${cobertura}` })
                                     setIsSelected(`${index}-${idx}`)
                                 }}
                             >
-                                <p className={`text-sm font-medium ${isSelected === `${index}-${idx}` ? 'text-gray-200' : 'text-gray-800'}`}>
-                                    {aseguradora.nombre} - {cobertura}
-                                </p>
-                            </div>
-                        ))
-                    ))}
-                </div>
+                                <span className="flex w-full items-start justify-between gap-3">
+                                    <span className={`text-sm font-semibold ${selected ? 'text-turquoise' : 'text-navy/50'}`}>
+                                        {aseguradora.nombre}
+                                    </span>
+                                    <span className={`grid h-6 w-6 shrink-0 place-items-center rounded-full border ${selected ? 'border-turquoise bg-turquoise text-navy' : 'border-navy/20'}`}>
+                                        {selected && <Check size={14} strokeWidth={3} />}
+                                    </span>
+                                </span>
+                                <span className="mt-4 text-lg font-extrabold leading-tight">{cobertura}</span>
+                            </button>
+                        );
+                    })
+                ))}
             </div>
-            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+            {error && <p className="text-sm font-medium text-red-500">{error}</p>}
 
             {/* Checkbox para suscribirse al newsletter */}
-            <div className="flex items-center space-x-2 mb-4">
+            <label htmlFor="subscribeNewsletter" className="flex cursor-pointer items-start gap-3 rounded-2xl bg-cream p-4">
                 <input
                     type="checkbox"
                     id="subscribeNewsletter"
@@ -90,19 +99,15 @@ const StepCoverages: React.FC<StepCoveragesProps> = ({ yearVehicle, formData, se
                             subscribeNewsletter: e.target.checked,
                         })
                     }
-                    className="w-12 h-12 md:w-4 md:h-4 text-[#3ec1d3] border-gray-300 rounded focus:ring-[#3ec1d3]"
+                    className="mt-0.5 h-5 w-5 shrink-0 rounded accent-[#3ec1d3]"
                 />
-                <label
-                    htmlFor="subscribeNewsletter"
-                    className="text-sm text-gray-600"
-                >
+                <span className="text-sm text-navy/70">
                     Suscríbete a nuestro newsletter para recibir
                     las últimas novedades y ofertas especiales.
-                </label>
-            </div>
+                </span>
+            </label>
         </div>
     )
 }
 
 export default StepCoverages;
-

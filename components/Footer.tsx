@@ -1,55 +1,68 @@
-import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { Instagram, ArrowUpRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 const Footer = () => {
   return (
-    <footer className="bg-[#0f1b36] text-white py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="bg-navy-dark text-white">
+      <div className="max-w-7xl mx-auto px-4 pt-20 pb-10 sm:px-6 lg:px-8">
+        <div className="flex flex-col gap-10 border-b border-white/10 pb-14 md:flex-row md:items-end md:justify-between">
           <div>
-            <Link href="/" className="text-xl font-bold">
-              <Image className='mb-4' src={'/assets/logo1.png'} alt='logo' width={125} height={125} />
+            <Link href="/">
+              <Image className="mb-8" src={'/assets/logo1.png'} alt="Rivolta Seguros" width={140} height={140} />
             </Link>
-            <p className="text-gray-400">
+            <p className="max-w-xl text-4xl font-extrabold leading-[1.05] md:text-5xl">
               Tu seguridad es nuestra prioridad
             </p>
           </div>
-          
+          <Link
+            href="/cotizar"
+            className="inline-flex items-center gap-3 self-start rounded-full bg-turquoise py-2 pl-6 pr-2 font-bold text-navy transition-colors hover:bg-white md:self-auto"
+          >
+            Cotizar ahora
+            <span className="grid h-10 w-10 place-items-center rounded-full bg-navy text-white">
+              <ArrowUpRight size={18} />
+            </span>
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 gap-10 py-14 sm:grid-cols-2 md:grid-cols-3">
           <div>
-            <h4 className="text-lg font-semibold mb-4">Enlaces</h4>
-            <ul className="space-y-2">
-              <li><a href="/" className="text-gray-400 hover:text-[#3ec1d3]">Inicio</a></li>
-              <li><a href="#about" className="text-gray-400 hover:text-[#3ec1d3]">Sobre Nosotros</a></li>
-              <li><a href="#insurers" className="text-gray-400 hover:text-[#3ec1d3]">Aseguradoras</a></li>
-              <li><a href="#contact" className="text-gray-400 hover:text-[#3ec1d3]">Contacto</a></li>
+            <h4 className="mb-5 text-lg font-bold text-white">Enlaces</h4>
+            <ul className="space-y-3">
+              <li><a href="/" className="text-white/80 hover:text-turquoise">Inicio</a></li>
+              <li><a href="/#about" className="text-white/80 hover:text-turquoise">Sobre Nosotros</a></li>
+              <li><a href="/#insurers" className="text-white/80 hover:text-turquoise">Aseguradoras</a></li>
+              <li><a href="/#contact" className="text-white/80 hover:text-turquoise">Contacto</a></li>
             </ul>
           </div>
-          
+
           <div>
-            <h4 className="text-lg font-semibold mb-4">Contacto</h4>
-            <ul className="space-y-2 text-gray-400">
-              <li>Email: Segurosrivolta@gmail.com</li>
-              <li>Teléfono: 2983 350597</li>
-              <li>Dirección: Mitre 74, Adolfo González Chaves, CP 7513</li>
+            <h4 className="mb-5 text-lg font-bold text-white">Contacto</h4>
+            <ul className="space-y-3 text-white/80">
+              <li><a href="mailto:Segurosrivolta@gmail.com" className="hover:text-turquoise">Segurosrivolta@gmail.com</a></li>
+              <li><a href="tel:+542983350597" className="hover:text-turquoise">2983 350597</a></li>
+              <li>Mitre 74, Adolfo González Chaves, CP 7513</li>
             </ul>
           </div>
-          
+
           <div>
-            <h4 className="text-lg font-semibold mb-4">Síguenos</h4>
-            <div className="flex space-x-4">
-              <a href="https://www.instagram.com/rivoltaseguros/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#3ec1d3]">
-                <Instagram size={24} />
-              </a>
-            </div>
+            <h4 className="mb-5 text-lg font-bold text-white">Síguenos</h4>
+            <a
+              href="https://www.instagram.com/rivoltaseguros/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="grid h-11 w-11 place-items-center rounded-full border border-white/15 text-white/80 transition-colors hover:border-turquoise hover:text-turquoise"
+            >
+              <Instagram size={20} />
+            </a>
           </div>
         </div>
-        
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-          <p className='flex gap-2 justify-center'>
-            &copy; 2025 Hecho por Rocketly
-            <Image className='mb-4' src={'/assets/iconRocket.png'} alt='logo' width={25} height={25} />
-          </p>
+
+        <div className="flex items-center justify-center gap-2 border-t border-white/10 pt-8 text-sm text-white/50">
+          &copy; 2025 Hecho por Rocketly
+          <Image src={'/assets/iconRocket.png'} alt="Rocketly" width={20} height={20} />
         </div>
       </div>
     </footer>

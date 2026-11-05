@@ -67,12 +67,8 @@ const Insurers = () => {
   }, []);
 
   return (
-    <section id="insurers" className="py-20 bg-gray-100 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold text-center text-[#152549] mb-12">
-          Nuestras Aseguradoras
-        </h2>
-        <div className="insurers-banner">
+    <div id="insurers" className="w-full overflow-hidden">
+        <div className="insurers-banner insurers-banner--dark">
           <div className="insurers-track" ref={trackRef}>
             {/* Primera copia de los logos para el carrusel infinito */}
             {insurers.map((insurer, index) => (
@@ -105,8 +101,7 @@ const Insurers = () => {
             ))}
           </div>
         </div>
-      </div>
-    </section>
+    </div>
   );
 };
 

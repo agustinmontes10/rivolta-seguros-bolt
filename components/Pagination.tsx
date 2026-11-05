@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 interface PaginationProps {
   productsPerPage: number;
@@ -14,23 +15,29 @@ const Pagination: React.FC<PaginationProps> = ({ productsPerPage, totalProducts,
     pageNumbers.push(i);
   }
 
+  const arrowClass =
+    'grid h-11 w-11 place-items-center rounded-full border border-navy/15 text-navy transition-colors hover:bg-navy hover:text-white disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-navy';
+
   return (
-    <nav className="flex justify-center mt-8">
+    <nav className="mt-12 flex justify-center">
       <ul className="inline-flex items-center gap-2">
         <li>
           <button
             onClick={() => paginate(currentPage - 1)}
             disabled={currentPage === 1}
-            className={`py-2 px-3 leading-tight rounded ${currentPage === 1 ? 'bg-gray-300 hover:bg-gray-300 hover:text-gray-500 text-gray-500 cursor-not-allowed' : 'bg-white text-[#152549]'} border border-gray-300 hover:bg-[#1a2d5a] hover:text-white transition-colors`}
+            aria-label="Anterior"
+            className={arrowClass}
           >
-            Anterior
+            <ArrowLeft size={18} />
           </button>
         </li>
         {pageNumbers.map(number => (
           <li key={number}>
             <button
               onClick={() => paginate(number)}
-              className={`py-2 px-3 leading-tight rounded ${currentPage === number ? 'bg-[#152549] text-white' : 'bg-white text-[#152549]'} border border-gray-300 hover:bg-[#1a2d5a] hover:text-white transition-colors`}
+              className={`h-11 min-w-[2.75rem] rounded-full px-3 text-sm font-bold transition-colors ${
+                currentPage === number ? 'bg-navy text-white' : 'text-navy/60 hover:text-navy'
+              }`}
             >
               {number}
             </button>
@@ -40,9 +47,10 @@ const Pagination: React.FC<PaginationProps> = ({ productsPerPage, totalProducts,
           <button
             onClick={() => paginate(currentPage + 1)}
             disabled={currentPage === pageNumbers?.length}
-            className={`py-2 px-3 leading-tight rounded ${currentPage === pageNumbers.length ? 'bg-gray-300 hover:bg-gray-300 hover:text-gray-500 text-gray-500 cursor-not-allowed' : 'bg-white text-[#152549]'} border border-gray-300 hover:bg-[#1a2d5a] hover:text-white transition-colors`}
+            aria-label="Siguiente"
+            className={arrowClass}
           >
-            Siguiente
+            <ArrowRight size={18} />
           </button>
         </li>
       </ul>

@@ -1,38 +1,28 @@
 import { motion } from "framer-motion";
-import dynamic from "next/dynamic";
-const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 interface ProgressBarProps {
   progress: number;
-  animationData: any;
+  step: number;
+  totalSteps: number;
 }
 
-const ProgressBar: React.FC<ProgressBarProps> = ({ progress, animationData }) => {
+const ProgressBar: React.FC<ProgressBarProps> = ({ progress, step, totalSteps }) => {
   return (
-    <div className="mb-8 mt-3">
-      <div className="h-2 bg-gray-200 rounded-full">
+    <div className="mb-10">
+      <div className="mb-3 flex items-center justify-between text-sm font-bold">
+        <span className="text-navy">
+          Paso {String(step).padStart(2, "0")}
+          <span className="text-navy/40"> / {String(totalSteps).padStart(2, "0")}</span>
+        </span>
+        <span className="text-navy/40">{Math.round(progress)}%</span>
+      </div>
+      <div className="h-1.5 overflow-hidden rounded-full bg-navy/10">
         <motion.div
-          className="h-full bg-[#3ec1d3] rounded-full"
+          className="h-full rounded-full bg-turquoise"
           initial={{ width: 0 }}
           animate={{ width: `${progress}%` }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         />
-      </div>
-      <div className="relative mt-2">
-        <motion.div
-          className="absolute"
-          initial={{ left: 0 }}
-          animate={{ left: `${progress}%` }}
-          transition={{ duration: 0.5 }}
-          style={{ transform: "translateY(-65%) translateX(-75%)" }}
-        >
-          {animationData && (
-            <Lottie
-              animationData={animationData}
-              style={{ width: 120, height: 120 }}
-            />
-          )}
-        </motion.div>
       </div>
     </div>
   );

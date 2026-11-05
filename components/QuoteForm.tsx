@@ -2,14 +2,12 @@
 
 import { useEffect, useState, KeyboardEvent } from "react";
 import { motion } from "framer-motion";
-// import Lottie from 'lottie-react';
-import dynamic from "next/dynamic";
+import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import Coverages from "@/app/cotizar/components/StepCoverages";
 import { FormDataType } from "@/types";
 import StepSimple from "@/app/cotizar/components/StepSimple";
 import ProgressBar from "@/app/cotizar/components/ProgressBar";
-import { version } from "node:os";
-const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
+import { fieldClass, labelClass, optionClass } from "@/app/cotizar/components/styles";
 
 const ACCESS_TOKEN = process.env.NEXT_PUBLIC_MELI_ACCESS_TOKEN;
 
@@ -31,7 +29,6 @@ export default function QuoteForm() {
   });
 
   const [error, setError] = useState("");
-  const [animationData, setAnimationData] = useState(null);
   const [isClient, setIsClient] = useState<boolean>(false);
   const [brands, setBrands] = useState([]);
   const [models, setModels] = useState([]);
@@ -45,13 +42,6 @@ export default function QuoteForm() {
   const [modelInput, setModelInput] = useState(false);
   const [versionInput, setVersionInput] = useState(false);
   
-  const animData = () => {
-    fetch("/assets/carAnimation.json")
-      .then((response) => response.json())
-      .then((data) => setAnimationData(data))
-      .catch((error) => console.error("Error loading animation:", error));
-  };
-
   const getBrands = async () => {
     setDisabled({ brand: true, model: true, version: true });
     const res = await fetch('/api/brands');
@@ -224,7 +214,6 @@ export default function QuoteForm() {
 
   useEffect(() => {
     setIsClient(true);
-    animData();
     getBrands();
   }, []);
 
@@ -238,14 +227,14 @@ export default function QuoteForm() {
     switch (formData.step) {
       case 1:
         return (
-          <div className="space-y-4 flex flex-col justify-center items-center">
-            <label className="block text-lg font-medium text-[#152549]">
+          <div className="flex flex-col gap-4">
+            <label className={labelClass}>
               Marca del vehículo
             </label>
 
             {brandInput ?
               <input
-                className="w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent"
+                className={fieldClass}
                 placeholder="Especificar marca"
                 onChange={(e) => {
                   setFormData({ ...formData, marca: e.target.value });
@@ -274,7 +263,7 @@ export default function QuoteForm() {
                     getModels(e.target.value);
                   }
                 }}
-                className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${error ? "border-red-500" : ""}`}
+                className={`${fieldClass} ${error ? "border-red-500" : ""}`}
               >
                 <option value="">Seleccionar Marca</option>
                 {brands.map((brand: string) => (
@@ -294,7 +283,7 @@ export default function QuoteForm() {
             
             {modelInput ? 
               <input
-                className="w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent"
+                className={fieldClass}
                 placeholder="Especificar modelo"
                 onChange={(e) => {
                   setFormData({ ...formData, modelo: e.target.value });
@@ -319,7 +308,7 @@ export default function QuoteForm() {
                       getVersions(e.target.value);
                     }
                   }}
-                  className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${error ? "border-red-500" : ""
+                  className={`${fieldClass} ${error ? "border-red-500" : ""
                     }`}
                 >
                   <option value="">Seleccionar Modelo</option>
@@ -342,7 +331,7 @@ export default function QuoteForm() {
             {/* VERSION */}
             {versionInput
               ? <input
-                  className="w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent"
+                  className={fieldClass}
                   placeholder="Especificar versión"
                   onChange={(e) => {
                     setFormData({ ...formData, version: e.target.value });
@@ -360,7 +349,7 @@ export default function QuoteForm() {
                       : setError("");
                         setFormData({ ...formData, version: e.target.value });
                     }}
-                    className={`w-full md:w-1/2 p-3 border border-[#152549] rounded-md focus:ring-2 focus:ring-[#3ec1d3] focus:border-transparent ${error ? "border-red-500" : ""
+                    className={`${fieldClass} ${error ? "border-red-500" : ""
                       }`}
                   >
                     <option value="">Seleccionar Versión</option>
@@ -406,37 +395,29 @@ export default function QuoteForm() {
         );
       case 4:
         return (
-          <div className="space-y-4 flex flex-col justify-center items-center">
-            <label className="block text-lg font-medium text-[#152549]">
+          <div className="flex flex-col gap-4">
+            <label className={labelClass}>
               ¿El vehículo tiene gas?
             </label>
-            <div className="flex space-x-6">
-              <label className="flex items-center cursor-pointer">
-                <input
-                  type="radio"
-                  name="gas"
-                  checked={!formData.gas}
-                  onChange={() => {
-                    setError("");
-                    setFormData({ ...formData, gas: false });
-                  }}
-                  className="mr-2 h-4 w-4 text-[#3ec1d3] focus:ring-[#3ec1d3] border-[#152549]"
-                />
-                <span className="text-[#152549] font-medium">No</span>
-              </label>
-              <label className="flex items-center cursor-pointer">
-                <input
-                  type="radio"
-                  name="gas"
-                  checked={formData.gas}
-                  onChange={() => {
-                    setError("");
-                    setFormData({ ...formData, gas: true });
-                  }}
-                  className="mr-2 h-4 w-4 text-[#3ec1d3] focus:ring-[#3ec1d3] border-[#152549]"
-                />
-                <span className="text-[#152549] font-medium">Sí</span>
-              </label>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { value: false, label: "No" },
+                { value: true, label: "Sí" },
+              ].map((option) => (
+                <label key={option.label} className={`${optionClass(formData.gas === option.value)} flex items-center gap-3`}>
+                  <input
+                    type="radio"
+                    name="gas"
+                    checked={formData.gas === option.value}
+                    onChange={() => {
+                      setError("");
+                      setFormData({ ...formData, gas: option.value });
+                    }}
+                    className="h-5 w-5 accent-[#3ec1d3]"
+                  />
+                  <span className="text-lg font-extrabold">{option.label}</span>
+                </label>
+              ))}
             </div>
           </div>
         );
@@ -509,11 +490,11 @@ export default function QuoteForm() {
 
   return (
     <div
-      className="bg-white p-8 rounded-lg shadow-xl shadow-gray-300 mb-8 "
+      className="rounded-3xl border border-navy/10 bg-white p-6 shadow-[0_40px_80px_-40px_rgba(21,37,73,0.3)] outline-none md:p-10"
       onKeyDown={handleKeyDown}
       tabIndex={0}
     >
-      <ProgressBar animationData={animationData} progress={progress} />
+      <ProgressBar progress={progress} step={formData.step} totalSteps={totalSteps} />
 
       <motion.div
         key={formData.step}
@@ -526,28 +507,35 @@ export default function QuoteForm() {
         {renderStep()}
       </motion.div>
 
-      <div className="flex justify-between mt-8">
+      <div className="mt-10 flex items-center justify-between border-t border-navy/10 pt-6">
         {formData.step > 1 && (
           <button
             onClick={handlePrevious}
-            className="px-6 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors"
+            className="inline-flex items-center gap-2 rounded-full border border-navy/15 px-5 py-3 font-bold text-navy transition-colors hover:bg-cream"
           >
+            <ArrowLeft size={18} />
             Anterior
           </button>
         )}
         {formData.step < totalSteps ? (
           <button
             onClick={handleNext}
-            className="ml-auto px-6 py-2 bg-[#3ec1d3] text-white rounded-md hover:bg-[#36adbf] transition-colors"
+            className="ml-auto inline-flex items-center gap-3 rounded-full bg-turquoise py-2 pl-6 pr-2 font-bold text-navy transition-colors hover:bg-navy hover:text-white"
           >
             Siguiente
+            <span className="grid h-9 w-9 place-items-center rounded-full bg-navy text-white">
+              <ArrowRight size={17} />
+            </span>
           </button>
         ) : (
           <button
             onClick={handleSubmit}
-            className="ml-auto px-6 py-2 bg-[#152549] text-white rounded-md hover:bg-[#1a2d5a] transition-colors"
+            className="ml-auto inline-flex items-center gap-3 rounded-full bg-navy py-2 pl-6 pr-2 font-bold text-white transition-colors hover:bg-navy-light"
           >
-            Enviar Cotización
+            Enviar cotización
+            <span className="grid h-9 w-9 place-items-center rounded-full bg-turquoise text-navy">
+              <ArrowUpRight size={17} />
+            </span>
           </button>
         )}
       </div>

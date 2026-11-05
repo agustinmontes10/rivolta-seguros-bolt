@@ -13,9 +13,27 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      opacity: {
+        15: '0.15',
+        35: '0.35',
+        85: '0.85',
+      },
+      fontFamily: {
+        sans: ['var(--font-manrope)', 'system-ui', 'sans-serif'],
+      },
       colors: {
         primary: '#152549',
         secondary: '#3ec1d3',
+        navy: {
+          DEFAULT: '#152549',
+          dark: '#0f1b36',
+          light: '#1d3160',
+        },
+        turquoise: {
+          DEFAULT: '#3ec1d3',
+          dark: '#33aebf',
+        },
+        cream: '#f5f3ee',
       },
       keyframes: {
         fadeIn: {
