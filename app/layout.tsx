@@ -1,11 +1,13 @@
 import ClientWrapper from './ClientWrapper';
 import './globals.css';
 import type { Metadata } from 'next';
-import { Manrope } from 'next/font/google';
+import localFont from 'next/font/local';
 
-const manrope = Manrope({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
+// Manrope variable (200–800) servida localmente para no depender de Google Fonts en el build
+const manrope = localFont({
+  src: './fonts/manrope-variable.woff2',
+  weight: '200 800',
+  style: 'normal',
   variable: '--font-manrope',
   display: 'swap',
 });
