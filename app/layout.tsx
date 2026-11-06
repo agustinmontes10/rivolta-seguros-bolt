@@ -2,6 +2,7 @@ import ClientWrapper from './ClientWrapper';
 import './globals.css';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
+import { Analytics } from '@vercel/analytics/next';
 
 // Manrope variable (200–800) servida localmente para no depender de Google Fonts en el build
 const manrope = localFont({
@@ -27,6 +28,7 @@ export default function RootLayout({
     <html lang="es" className={manrope.variable}>
       <body>
         <ClientWrapper>{children}</ClientWrapper>
+        <Analytics />
       </body>
     </html>
   );

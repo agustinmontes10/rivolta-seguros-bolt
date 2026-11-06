@@ -55,10 +55,10 @@ const AboutUs = () => {
           >
             <div className="overflow-hidden rounded-2xl">
               <img
-                src={img("photo-1573167243872-43c6433b9d40", 1400)}
-                alt="Equipo de trabajo"
+                src="/assets/nosotros-web.jpg"
+                alt="Equipo de Rivolta Seguros"
                 loading="lazy"
-                className="aspect-[4/5] w-full object-cover"
+                className="aspect-[5/4] w-full object-cover object-[60%_center]"
               />
             </div>
             <div className="absolute bottom-5 left-5 right-5 rounded-2xl bg-navy p-6 text-white sm:right-auto sm:max-w-xs">
